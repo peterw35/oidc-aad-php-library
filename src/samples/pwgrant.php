@@ -29,7 +29,7 @@ require(__DIR__.'/../../vendor/autoload.php');
 
 // Construct.
 $httpclient = new \microsoft\adalphp\HttpClient;
-$storage = new \microsoft\adalphp\samples\Storage(__DIR__.'/storagedb.sqlite');
+$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
 $client = new \microsoft\adalphp\AAD\Client($httpclient, $storage);
 
 // Set credentials.
