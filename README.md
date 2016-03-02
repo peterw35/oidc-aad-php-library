@@ -21,9 +21,14 @@ Construct an HttpClient object:
 ```
 $httpclient = new \microsoft\adalphp\HttpClient;
 ```
-Construct a storage object. A storage object needs to implement the \microsoft\adalphp\OIDC\StorageInterface interface. A sample implementation is available in the ```samples``` folder, but you may need to implement this class yourself based on your storage needs or environment.
+Construct a storage object. A storage object needs to implement the \microsoft\adalphp\OIDC\StorageInterface interface. Currently, two sample implementations are available under `microsoft\adalphp\OIDC\StorageProviders` namespace - `SQLite` and `Session`, but you may need to implement this class yourself based on your storage needs or environment.
+Initialize `SQLite` storage provider (as shown in `samples` folder):
 ```
-$storage = new \microsoft\adalphp\samples\Storage(__DIR__.'/storagedb.sqlite');
+$storage = new \microsoft\adalphp\OIDC\StorageInterface\SQLite(__DIR__.'/storagedb.sqlite');
+```
+or initialize the `Session` storage provider:
+```
+$storage = new \microsoft\adalphp\OIDC\StorageInterface\Session();
 ```
 Construct the AzureAD client class using the $httpclient and $storage instances.
 ```

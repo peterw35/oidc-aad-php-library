@@ -20,28 +20,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author James McQuillan <james.mcquillan@remote-learner.net>
+ * @author Jan Hajek <jan.hajek@thenetw.org>
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\samples;
+namespace microsoft\adalphp\OIDC\StorageProviders;
 
 /**
  * OIDC Storage implementation using a sqlite database.
  */
-class Storage implements \microsoft\adalphp\OIDC\StorageInterface {
+class Session implements \microsoft\adalphp\OIDC\StorageInterface {
     /**
      * Constructor.
      *
-     * @param string $sqlitedb The path to the sqlite database file.
      */
-    public function __construct($sqlitedb) {
-        if (!file_exists($sqlitedb) || !is_readable($sqlitedb)) {
-            throw new \Exception('Cannot read database.');
+    public function __construct() {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
-        $this->dbfile = $sqlitedb;
-        $this->db = new \PDO('sqlite:'.$this->dbfile);
     }
 
     /**
@@ -53,18 +50,10 @@ class Storage implements \microsoft\adalphp\OIDC\StorageInterface {
      * @return bool Success/Failure
      */
     public function store_state($state, $nonce, $stateparams) {
-        $sql = 'INSERT INTO state(state, nonce, additional) values (:state, :nonce, :additional)';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':state', $state, \PDO::PARAM_STR);
-        $stmt->bindParam(':nonce', $nonce, \PDO::PARAM_STR);
-        $stateparams = serialize($stateparams);
-        $stmt->bindParam(':additional', $stateparams, \PDO::PARAM_STR);
-        $stmt->execute();
-
-        $errinfo = $stmt->errorInfo();
-        if ($errinfo[0] !== '00000') {
-            throw new \Exception($errinfo[2]);
-        }
+        $_SESSION[get_class($this)][$state] = [
+            'nonce' => $nonce,
+            'additional' => $stateparams,
+        ];
 
         return true;
     }
@@ -76,20 +65,16 @@ class Storage implements \microsoft\adalphp\OIDC\StorageInterface {
      * @return array List of additional data and the expected nonce.
      */
     public function get_state($state) {
-        $sql = 'SELECT * FROM state WHERE state = :state';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':state', $state, \PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
+        if(isset($_SESSION[get_class($this)][$state])) {
+            $result = $_SESSION[get_class($this)][$state];
 
-        if (empty($result)) {
+            return [
+                $result['additional'],
+                $result['nonce'],
+            ];
+        } else {
             throw new \Exception('Unknown state.');
         }
-
-        return [
-            unserialize($result[0]['additional']),
-            $result[0]['nonce'],
-        ];
     }
 
     /**
@@ -98,9 +83,13 @@ class Storage implements \microsoft\adalphp\OIDC\StorageInterface {
      * @param string $nonce The nonce to look for.
      */
     public function delete_state($nonce) {
-        $sql = 'DELETE FROM state WHERE nonce = :nonce';
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':nonce', $nonce, \PDO::PARAM_STR);
-        $stmt->execute();
+        if(isset($_SESSION[get_class($this)])) {
+            foreach($_SESSION[get_class($this)] as $key=>$value) {
+                if($value['nonce'] == $nonce) {
+                    unset($_SESSION[$key]);
+                    break;
+                }
+            }
+        }
     }
 }
