@@ -27,15 +27,35 @@
 
 require(__DIR__.'/../../vendor/autoload.php');
 
-echo '<h1>Welcome to the PHP Azure AD Demo</h1>';
-echo '<h4>This package contains libraries to authenticate with Azure AD using OpenID Connect.</h4>';
+// Construct.
+$httpclient = new \microsoft\adalphp\HttpClient;
+$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
+$client = new \microsoft\adalphp\Hybrid\Client($httpclient, $storage);
 
-echo '<a href="login.php?prompt=1">Authorization request login (with login prompt).</a><br />';
-echo '<a href="login.php">Authorization request login (using existing session).</a><br />';
-echo '<a href="loginhybrid.php?prompt=1">Hybrid Authorization request login (with login prompt).</a><br />';
-echo '<br /><br /><h4>Username/Password Grant</h4>';
-echo '<form action="pwgrant.php" method="post">';
-echo '<label for="username">Username:</label> <input type="text" id="username" name="username" /><br />';
-echo '<label for="password">Password:</label> <input type="password" id="password" name="password" /><br />';
-echo '<input type="submit" name="submit" />';
-echo '</form>';
+// Set credentials.
+require(__DIR__.'/config.php');
+if (!defined('ADALPHP_CLIENTID') || empty(ADALPHP_CLIENTID)) {
+	throw new \Exception('No client ID set - please set in config.php');
+}
+$client->set_clientid(ADALPHP_CLIENTID);
+
+if (!defined('ADALPHP_CLIENTSECRET') || empty(ADALPHP_CLIENTSECRET)) {
+	throw new \Exception('No client secret set - please set in config.php');
+}
+$client->set_clientsecret(ADALPHP_CLIENTSECRET);
+
+if (!defined('ADALPHP_CLIENTREDIRECTURIHYBRID') || empty(ADALPHP_CLIENTREDIRECTURIHYBRID)) {
+	throw new \Exception('No redirect URI set - please set in config.php');
+}
+$client->set_redirecturi(ADALPHP_CLIENTREDIRECTURIHYBRID);
+
+// Process response.
+list($idtoken, $stateparams) = $client->handle_id_token($_REQUEST);
+
+// Output.
+echo '<h1>Welcome to the PHP Azure AD Demo</h1>';
+echo '<h2>Hello, '.$idtoken->claim('name').' ('.$idtoken->claim('upn').'). </h2>';
+echo '<h4>You have successfully authenticated with Azure AD using OpenID Connect. '
+			.'This is just a demo, but the libraries contained in this package will provide an OpenID Connect idtoken and an '
+			.'oAuth2 access token to use Azure AD APIs</h4>';
+echo '<a href="index.php">Click here start again.</a>';
