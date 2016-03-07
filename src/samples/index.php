@@ -33,6 +33,7 @@ echo '<h4>This package contains libraries to authenticate with Azure AD using Op
 echo '<a href="login.php?prompt=1">Authorization request login (with login prompt).</a><br />';
 echo '<a href="login.php">Authorization request login (using existing session).</a><br />';
 echo '<a href="loginhybrid.php?prompt=1">Hybrid Authorization request login (with login prompt).</a><br />';
+echo '<a href="loginhybrid.php">Hybrid Authorization request login (using existing session).</a><br />';
 echo '<br /><br /><h4>Username/Password Grant</h4>';
 echo '<form action="pwgrant.php" method="post">';
 echo '<label for="username">Username:</label> <input type="text" id="username" name="username" /><br />';
