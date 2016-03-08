@@ -25,12 +25,12 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\Hybrid;
+namespace microsoft\adalphp\AAD;
 
 use \microsoft\adalphp\HttpClientInterface;
 use \microsoft\adalphp\ADALPHPException;
 
-class Client extends \microsoft\adalphp\OIDC\Client {
+class Clienthybrid extends \microsoft\adalphp\OIDC\Client {
 
     /** @var string Auth endpoint. */
     protected $authendpoint = 'https://login.microsoftonline.com/common/oauth2/authorize';

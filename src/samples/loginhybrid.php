@@ -30,7 +30,7 @@ require(__DIR__.'/../../vendor/autoload.php');
 // Construct.
 $httpclient = new \microsoft\adalphp\HttpClient;
 $storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
-$client = new \microsoft\adalphp\Hybrid\Client($httpclient, $storage);
+$client = new \microsoft\adalphp\AAD\Clienthybrid($httpclient, $storage);
 
 // Set credentials.
 require(__DIR__.'/config.php');
