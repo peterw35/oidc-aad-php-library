@@ -34,9 +34,17 @@ echo '<a href="login.php?prompt=1">Authorization request login (with login promp
 echo '<a href="login.php">Authorization request login (using existing session).</a><br />';
 echo '<a href="loginhybrid.php?prompt=1">Hybrid Authorization request login (with login prompt).</a><br />';
 echo '<a href="loginhybrid.php">Hybrid Authorization request login (using existing session).</a><br />';
+echo '<a href="signup.php">Sign Up</a><br />';
 echo '<br /><br /><h4>Username/Password Grant</h4>';
 echo '<form action="pwgrant.php" method="post">';
 echo '<label for="username">Username:</label> <input type="text" id="username" name="username" /><br />';
 echo '<label for="password">Password:</label> <input type="password" id="password" name="password" /><br />';
+echo '<input type="submit" name="submit" />';
+echo '</form>';
+
+echo '<br /><br /><h4>Local Account Log in</h4>';
+echo '<form action="loginlocal.php" method="post">';
+echo '<label for="username">Username:</label> <input type="text" id="localusername" name="localusername" /><br />';
+echo '<label for="password">Password:</label> <input type="password" id="localpassword" name="localpassword" /><br />';
 echo '<input type="submit" name="submit" />';
 echo '</form>';
