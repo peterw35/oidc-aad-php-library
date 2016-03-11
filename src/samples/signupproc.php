@@ -27,17 +27,23 @@
 
 require(__DIR__.'/../../vendor/autoload.php');
 
+// Construct.
+$dbFunc = new \microsoft\adalphp\samples\dbfunctions;
+
 require('connect.php');
     // If the values are posted, insert them into the database.
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $reg_date = new DateTime();
 
-    $query = "INSERT INTO `Users` (firstname, lastname, username, password, email) "
-            . "VALUES ('$firstname', '$lastname', '$username', '$password', '$email')";
-    $result = mysql_query($query);
+    $email = $dbFunc->isUserExist($_POST['email']);  
+        if(!$email){  
+            $result = $dbFunc->insertUser($_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['username'], $_POST['password']);
+            if($result){  
+                 echo "<script>alert('Registration Successful')</script>";  
+            }else{  
+                echo "<script>alert('Registration Not Successful')</script>";  
+            }  
+        } 
+        else {  
+            echo "<script>alert('Email Already Exist')</script>";  
+        }
 
 echo '<a href="index.php">Click Sign In</a>'; 

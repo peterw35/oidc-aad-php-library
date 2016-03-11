@@ -25,15 +25,16 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
+namespace microsoft\adalphp\samples;
+
+use microsoft\adalphp\samples;
+
 require(__DIR__.'/../../vendor/autoload.php');
 
-require('connect.php');
+// Construct.
+$dbFunc = new \microsoft\adalphp\samples\dbfunctions;
 
-$username = $_POST['localusername'];
-$password = $_POST['localpassword'];
-    
-$query = "SELECT * FROM Users WHERE username = '$username' and password = '$password'";
-$result = mysql_query($query);
+$result = $dbFunc->verifyUser($_POST['localusername'], $_POST['localpassword']);
 
 if($result){
     // Output.

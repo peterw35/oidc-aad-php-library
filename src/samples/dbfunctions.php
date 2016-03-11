@@ -25,31 +25,37 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
+namespace microsoft\adalphp\samples;
+
 require(__DIR__.'/../../vendor/autoload.php');
 
-// Set credentials.
-require('/config.php');
-if (!defined('DB_HOST') || empty(DB_HOST)) {
-	throw new \Exception('No DB HOST set - please set in config.php');
-}
+require('connect.php');
 
-if (!defined('DB_USER') || empty(DB_USER)) {
-	throw new \Exception('No DB USER set - please set in config.php');
-}
-
-if (!defined('DB_PASSWORD') || empty(DB_PASSWORD)) {
-	throw new \Exception('No DB PASSWORD set - please set in config.php');
-}
-
-if (!defined('DB_DATABSE') || empty(DB_DATABSE)) {
-	throw new \Exception('No DB DATABSE set - please set in config.php');
-}
-
-$connection = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
-if (!$connection){
-    die("Database Connection Failed" . mysql_error());
-}
-$select_db = mysql_select_db(DB_DATABSE);
-if (!$select_db){
-    die("Database Selection Failed" . mysql_error());
+class dbfunctions { 
+    public function  __construct() {}
+    
+    public function isUserExist($emailid){  
+        $query = mysql_query("SELECT * FROM Users WHERE email = '".$emailid."'");  
+        if(mysql_num_rows($query) > 0){  
+            return true;  
+        } else {  
+            return false;  
+        }
+    }
+    
+    public function insertUser($firstname, $lastname, $email, $username, $password){  
+        
+        $query = "INSERT INTO `Users` (firstname, lastname, username, password, email) "
+            . "VALUES ('$firstname', '$lastname', '$username', '$password', '$email')";
+        $result = mysql_query($query);
+        
+        return $result;
+    }
+    
+    public function verifyUser($username, $password){
+        $query = "SELECT * FROM Users WHERE username = '$username' and password = '$password'";
+        $result = mysql_query($query);
+        
+        return $result;  
+    }
 }
