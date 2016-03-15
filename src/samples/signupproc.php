@@ -35,7 +35,7 @@ require('connect.php');
 
     $email = $dbFunc->isUserExist($_POST['email']);  
         if(!$email){  
-            $result = $dbFunc->insertUser($_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['username'], $_POST['password']);
+            $result = $dbFunc->insertUser($_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['password']);
             if($result){  
                  echo "<script>alert('Registration Successful')</script>";  
             }else{  

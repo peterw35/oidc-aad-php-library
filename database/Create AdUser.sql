@@ -1,0 +1,7 @@
+CREATE TABLE AdUsers (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+userId INT(6) UNSIGNED,
+accessTokenResponse TEXT NULL,
+idTokenResponse TEXT NULL,
+FOREIGN KEY (userId) REFERENCES users(id)
+);

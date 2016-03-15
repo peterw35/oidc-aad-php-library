@@ -43,17 +43,24 @@ class dbfunctions {
         }
     }
     
-    public function insertUser($firstname, $lastname, $email, $username, $password){  
+    public function insertUser($firstname, $lastname, $email, $password){  
         
-        $query = "INSERT INTO `Users` (firstname, lastname, username, password, email) "
-            . "VALUES ('$firstname', '$lastname', '$username', '$password', '$email')";
+        $query = "INSERT INTO `Users` (firstname, lastname, password, email) "
+            . "VALUES ('$firstname', '$lastname', '$password', '$email')";
         $result = mysql_query($query);
         
         return $result;
     }
     
-    public function verifyUser($username, $password){
-        $query = "SELECT * FROM Users WHERE username = '$username' and password = '$password'";
+    public function verifyUser($email, $password){
+        $query = "SELECT * FROM Users WHERE email = '$email' and password = '$password'";
+        $result = mysql_query($query);
+        
+        return $result;  
+    }
+    
+    public function verifyAdUser($id){
+        $query = "SELECT * FROM AdUsers WHERE userId = '$id'";
         $result = mysql_query($query);
         
         return $result;  

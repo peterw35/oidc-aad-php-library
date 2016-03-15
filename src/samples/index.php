@@ -44,7 +44,7 @@ echo '</form>';
 
 echo '<br /><br /><h4>Local Account Log in</h4>';
 echo '<form action="loginlocal.php" method="post">';
-echo '<label for="username">Username:</label> <input type="text" id="localusername" name="localusername" /><br />';
+echo '<label for="email">Email:</label> <input type="text" id="localemail" name="localemail" /><br />';
 echo '<label for="password">Password:</label> <input type="password" id="localpassword" name="localpassword" /><br />';
 echo '<input type="submit" name="submit" />';
 echo '</form>';

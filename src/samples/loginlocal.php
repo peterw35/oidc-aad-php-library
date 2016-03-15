@@ -34,13 +34,31 @@ require(__DIR__.'/../../vendor/autoload.php');
 // Construct.
 $dbFunc = new \microsoft\adalphp\samples\dbfunctions;
 
-$result = $dbFunc->verifyUser($_POST['localusername'], $_POST['localpassword']);
+$result = $dbFunc->verifyUser($_POST['localemail'], $_POST['localpassword']);
 
 if($result){
     // Output.
     echo '<h1>Welcome to the PHP Azure AD Demo</h1>';
     echo '<h2>Hello, '.mysql_result($result,0,1).' '.mysql_result($result,0,2).'. </h2>';
     echo '<h4>You have successfully authenticated with local account. ';
-
+    
+    $resultAdUser = $dbFunc->verifyAdUser(mysql_result($result,0,0));
+    
+    if($resultAdUser) {
+        echo '<table border="1" style="width:100%">';
+        echo '<tr>';
+        echo '<th>User Id</th>';
+        echo '<th>Access Token Response</th>';
+        echo '<th>Id Token Response</th>';
+        echo '</tr>';
+        while($row = mysql_fetch_array($resultAdUser)) {
+            echo '<tr>';
+              echo '<td>'.$row['userId'].'</td>';
+              echo '<td>'.$row['accessTokenResponse'].'</td>';
+              echo '<td>'.$row['idTokenResponse'].'</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
     echo '<a href="index.php">Click here start again.</a>';
 }

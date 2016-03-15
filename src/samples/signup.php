@@ -38,9 +38,6 @@ echo '<form action="signupproc.php" method="POST">';
     echo '<p><label>E-Mail : </label>';
     echo '<input id="email" type="email" name="email" placeholder="email" /></p>';
     
-    echo '<p><label>User Name : </label>';
-    echo '<input id="username" type="text" name="username" placeholder="username" /></p>';
-
     echo '<p><label>Password : </label>';
     echo '<input id="password" type="password" name="password" placeholder="password" /></p>';
 
