@@ -25,18 +25,40 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
+namespace microsoft\adalphp\samples;
+
+use microsoft\adalphp\samples;
+
 require(__DIR__.'/../../vendor/autoload.php');
 
-echo '<h1>Welcome to the PHP Azure AD Demo</h1>';
-echo '<h4>This package contains libraries to authenticate with Azure AD using OpenID Connect.</h4>';
+// Construct.
+$dbFunc = new \microsoft\adalphp\samples\dbfunctions;
 
-echo '<a href="login.php?prompt=1">Authorization request login (with login prompt).</a><br />';
-echo '<a href="login.php">Authorization request login (using existing session).</a><br />';
-echo '<a href="loginhybrid.php?prompt=1">Hybrid Authorization request login (with login prompt).</a><br />';
-echo '<a href="loginhybrid.php">Hybrid Authorization request login (using existing session).</a><br />';
-echo '<br /><br /><h4>Username/Password Grant</h4>';
-echo '<form action="pwgrant.php" method="post">';
-echo '<label for="username">Username:</label> <input type="text" id="username" name="username" /><br />';
-echo '<label for="password">Password:</label> <input type="password" id="password" name="password" /><br />';
-echo '<input type="submit" name="submit" />';
-echo '</form>';
+$result = $dbFunc->verifyUser($_POST['localemail'], $_POST['localpassword']);
+
+if($result){
+    // Output.
+    echo '<h1>Welcome to the PHP Azure AD Demo</h1>';
+    echo '<h2>Hello, '.mysql_result($result,0,1).' '.mysql_result($result,0,2).'. </h2>';
+    echo '<h4>You have successfully authenticated with local account. ';
+    
+    $resultAdUser = $dbFunc->verifyAdUser(mysql_result($result,0,0));
+    
+    if(mysql_num_rows($resultAdUser) > 0)  {
+        echo '<table border="1" style="width:100%">';
+        echo '<tr>';
+        echo '<th>User Id</th>';
+        echo '<th>Access Token Response</th>';
+        echo '<th>Id Token Response</th>';
+        echo '</tr>';
+        while($row = mysql_fetch_array($resultAdUser)) {
+            echo '<tr>';
+              echo '<td>'.$row['userId'].'</td>';
+              echo '<td>'.$row['accessTokenResponse'].'</td>';
+              echo '<td>'.$row['idTokenResponse'].'</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
+    echo '<a href="index.php">Click here start again.</a>';
+}
