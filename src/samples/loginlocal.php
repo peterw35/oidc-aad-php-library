@@ -44,7 +44,7 @@ if($result){
     
     $resultAdUser = $dbFunc->verifyAdUser(mysql_result($result,0,0));
     
-    if($resultAdUser) {
+    if(mysql_num_rows($resultAdUser) > 0)  {
         echo '<table border="1" style="width:100%">';
         echo '<tr>';
         echo '<th>User Id</th>';

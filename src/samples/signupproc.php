@@ -30,9 +30,7 @@ require(__DIR__.'/../../vendor/autoload.php');
 // Construct.
 $dbFunc = new \microsoft\adalphp\samples\dbfunctions;
 
-require('connect.php');
     // If the values are posted, insert them into the database.
-
     $email = $dbFunc->isUserExist($_POST['email']);  
         if(!$email){  
             $result = $dbFunc->insertUser($_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['password']);
