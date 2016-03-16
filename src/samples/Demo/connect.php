@@ -28,7 +28,7 @@
 require(__DIR__.'/../../../vendor/autoload.php');
 
 // Set credentials.
-require('/config.php');
+require('/../config.php');
 if (!defined('DB_HOST') || empty(DB_HOST)) {
 	throw new \Exception('No DB HOST set - please set in config.php');
 }

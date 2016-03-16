@@ -33,7 +33,7 @@ $storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/../stor
 $client = new \microsoft\adalphp\AAD\Client($httpclient, $storage);
 
 // Set credentials.
-require(__DIR__.'/config.php');
+require(__DIR__.'/../config.php');
 if (!defined('ADALPHP_CLIENTID') || empty(ADALPHP_CLIENTID)) {
 	throw new \Exception('No client ID set - please set in config.php');
 }

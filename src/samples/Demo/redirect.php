@@ -30,6 +30,7 @@ require(__DIR__.'/../../../vendor/autoload.php');
 // Construct.
 $httpclient = new \microsoft\adalphp\HttpClient;
 $storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/../storagedb.sqlite');
+$dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
 if (!empty($_REQUEST['id_token'])) {
     $client = new \microsoft\adalphp\AAD\Clienthybrid($httpclient, $storage);
 }
@@ -38,7 +39,7 @@ if (!empty($_REQUEST['id_token'])) {
 }
 
 // Set credentials.
-require(__DIR__.'/config.php');
+require(__DIR__.'/../config.php');
 if (!defined('ADALPHP_CLIENTID') || empty(ADALPHP_CLIENTID)) {
 	throw new \Exception('No client ID set - please set in config.php');
 }
@@ -60,6 +61,13 @@ if (!empty($_REQUEST['id_token'])) {
 }
  else {
     list($idtoken, $tokenparams, $stateparams) = $client->handle_auth_response($_REQUEST);
+    $userId = $dbFunc->isUserEmailExist($idtoken->claim('upn'));
+    if($userId) {
+       $result = $dbFunc->insertAdUser($tokenparams, $userId); 
+       if(!$result){  
+           echo "<script>alert('Some Error')</script>";  
+       }
+    }
 }
 
 // Output.

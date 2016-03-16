@@ -43,6 +43,16 @@ class dbfunctions {
         }
     }
     
+    public function isUserEmailExist($emailid){  
+        $query = "SELECT * FROM Users WHERE email = '".$emailid."'"; 
+        $result = mysql_query($query);
+        if(mysql_num_rows($result) > 0){  
+            return mysql_result($result,0,0);  
+        } else {  
+            return false;  
+        }
+    }
+    
     public function insertUser($firstname, $lastname, $email, $password){  
         
         $query = "INSERT INTO `Users` (firstname, lastname, password, email) "
@@ -61,6 +71,15 @@ class dbfunctions {
     
     public function verifyAdUser($id){
         $query = "SELECT * FROM AdUsers WHERE userId = '$id'";
+        $result = mysql_query($query);
+        
+        return $result;  
+    }
+    
+    public function insertAdUser($tokenparams, $userId){
+        $encodedtokenparams = @json_encode($tokenparams, true);
+        $query = "INSERT INTO `AdUsers` (userId , accessTokenResponse) "
+                . "VALUES ('$userId', '$encodedtokenparams')";
         $result = mysql_query($query);
         
         return $result;  
