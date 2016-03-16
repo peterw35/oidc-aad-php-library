@@ -20,26 +20,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author James McQuillan <james.mcquillan@remote-learner.net>
+ * @author Aashay Zajriya <aashay@introp.net>
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
-
-require(__DIR__.'/../../vendor/autoload.php');
-
-echo '<h1>Register</h1>';
-echo '<form action="signupproc.php" method="POST">';
-    echo '<p><label>User First Name : </label>';
-    echo '<input id="firstname" type="text" name="firstname" placeholder="firstname" /></p>';
-    
-    echo '<p><label>User Last Name : </label>';
-    echo '<input id="lastname" type="text" name="lastname" placeholder="lastname" /></p>';
-    
-    echo '<p><label>E-Mail : </label>';
-    echo '<input id="email" type="email" name="email" placeholder="email" /></p>';
-    
-    echo '<p><label>Password : </label>';
-    echo '<input id="password" type="password" name="password" placeholder="password" /></p>';
-
-    echo '<input type="submit" name="submit" />';
-echo '</form>';
+?>
+<html>
+    <head>
+        <?php require(__DIR__.'/../../../vendor/autoload.php'); ?>
+        <?php include './header.php'; ?>
+    </head>
+    <body>
+        <div class="container">
+            <form class="form-horizontal" action="signupproc.php" method="post">
+                <fieldset>
+                    <legend>Register</legend>
+                    <div class="form-group">
+                        <label for="firstname" class="col-lg-2 control-label">First Name</label>
+                        <div class="col-lg-3">
+                          <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstname" class="col-lg-2 control-label">Last Name</label>
+                        <div class="col-lg-3">
+                          <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username" class="col-lg-2 control-label">E-Mail</label>
+                        <div class="col-lg-3">
+                          <input type="email" class="form-control" id="email" name="email" placeholder="E-Mail">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-lg-2 control-label">Password</label>
+                        <div class="col-lg-3">
+                          <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-3 col-lg-offset-2">
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>

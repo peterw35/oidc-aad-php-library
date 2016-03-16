@@ -20,14 +20,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author James McQuillan <james.mcquillan@remote-learner.net>
+ * @author Aashay Zajriya <aashay@introp.net>
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\samples;
+namespace microsoft\adalphp\samples\Demo;
 
-require(__DIR__.'/../../vendor/autoload.php');
+require(__DIR__.'/../../../vendor/autoload.php');
 
 require('connect.php');
 

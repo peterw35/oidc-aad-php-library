@@ -25,11 +25,11 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-require(__DIR__.'/../../vendor/autoload.php');
+require(__DIR__.'/../../../vendor/autoload.php');
 
 // Construct.
 $httpclient = new \microsoft\adalphp\HttpClient;
-$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
+$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/../storagedb.sqlite');
 if (!empty($_GET['type']) && $_GET['type'] === 'Hybrid') {
     $client = new \microsoft\adalphp\AAD\Clienthybrid($httpclient, $storage);
 }

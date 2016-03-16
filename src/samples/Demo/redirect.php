@@ -20,16 +20,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author James McQuillan <james.mcquillan@remote-learner.net>
+ * @author Aashay Zajriya <aashay@introp.net>
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-require(__DIR__.'/../../vendor/autoload.php');
+require(__DIR__.'/../../../vendor/autoload.php');
 
 // Construct.
 $httpclient = new \microsoft\adalphp\HttpClient;
-$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
+$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/../storagedb.sqlite');
 if (!empty($_REQUEST['id_token'])) {
     $client = new \microsoft\adalphp\AAD\Clienthybrid($httpclient, $storage);
 }
@@ -63,9 +63,19 @@ if (!empty($_REQUEST['id_token'])) {
 }
 
 // Output.
-echo '<h1>Welcome to the PHP Azure AD Demo</h1>';
-echo '<h2>Hello, '.$idtoken->claim('name').' ('.$idtoken->claim('upn').'). </h2>';
-echo '<h4>You have successfully authenticated with Azure AD using OpenID Connect. '
-			.'This is just a demo, but the libraries contained in this package will provide an OpenID Connect idtoken and an '
-			.'oAuth2 access token to use Azure AD APIs</h4>';
-echo '<a href="index.php">Click here start again.</a>';
+?>
+
+<html>
+    <head>
+        <?php include './header.php'; ?>
+    </head>
+    <body>
+        <div class="container">
+            <br />
+            <h1>Welcome to the PHP Azure AD Demo</h1>
+            <h2>Hello, <?php echo $idtoken->claim('name').' ('.$idtoken->claim('upn').').' ?></h2>
+            <h4>You have successfully authenticated with Azure AD using OpenID Connect. This is just a demo, but the libraries contained in this package will provide an OpenID Connect idtoken and an oAuth2 access token to use Azure AD APIs</h4>
+            <a class="btn btn-primary" href="index.php">Click here start again.</a>
+        </div>
+    </body>
+</html>

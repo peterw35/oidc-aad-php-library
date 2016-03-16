@@ -25,20 +25,38 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\samples\Demo;
-
-use microsoft\adalphp\samples\Demo;
-
 require(__DIR__.'/../../../vendor/autoload.php');
 
 // Construct.
-$dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
+$httpclient = new \microsoft\adalphp\HttpClient;
+$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/../storagedb.sqlite');
+$client = new \microsoft\adalphp\AAD\Client($httpclient, $storage);
 
-$result = $dbFunc->verifyUser($_POST['localemail'], $_POST['localpassword']);
+// Set credentials.
+require(__DIR__.'/config.php');
+if (!defined('ADALPHP_CLIENTID') || empty(ADALPHP_CLIENTID)) {
+	throw new \Exception('No client ID set - please set in config.php');
+}
+$client->set_clientid(ADALPHP_CLIENTID);
 
-if($result){
-    // Output.
-?>   
+if (!defined('ADALPHP_CLIENTSECRET') || empty(ADALPHP_CLIENTSECRET)) {
+	throw new \Exception('No client secret set - please set in config.php');
+}
+$client->set_clientsecret(ADALPHP_CLIENTSECRET);
+
+if (!defined('ADALPHP_CLIENTREDIRECTURI') || empty(ADALPHP_CLIENTREDIRECTURI)) {
+	throw new \Exception('No redirect URI set - please set in config.php');
+}
+$client->set_redirecturi(ADALPHP_CLIENTREDIRECTURI);
+
+// Make request.
+$returned = $client->rocredsrequest($_POST['username'], $_POST['password']);
+
+// Process id token.
+$idtoken = \microsoft\adalphp\AAD\IDToken::instance_from_encoded($returned['id_token']);
+
+// Output.
+?>
 
 <html>
     <head>
@@ -48,35 +66,8 @@ if($result){
         <div class="container">
             <br />
             <h1>Welcome to the PHP Azure AD Demo</h1>
-            <h2>Hello, <?php mysql_result($result,0,1) ?> <?php mysql_result($result,0,2) ?>. </h2>
-            <h4>You have successfully authenticated with local account.</h4>
-            <?php
-                $resultAdUser = $dbFunc->verifyAdUser(mysql_result($result,0,0));
-
-                if(mysql_num_rows($resultAdUser) > 0)  {
-                ?> 
-                    <table border="1" style="width:100%">
-                        <tr>
-                            <th>User Id</th>
-                            <th>Access Token Response</th>
-                            <th>Id Token Response</th>
-                        </tr>
-                        <?php 
-                            while($row = mysql_fetch_array($resultAdUser)) {
-                        ?>
-                        <tr>
-                          <td><?php $row['userId'] ?></td>
-                          <td><?php $row['accessTokenResponse'] ?></td>
-                          <td><?php $row['idTokenResponse'] ?></td>
-                        </tr>
-                    <?php 
-                    }
-                    ?>
-                    </table>
-             <?php
-             }
-            }
-            ?> 
+            <h2>Hello, <?php echo $idtoken->claim('name').' ('.$idtoken->claim('upn').').' ?></h2>
+            <h4>You have successfully authenticated with Azure AD using OpenID Connect. This is just a demo, but the libraries contained in this package will provide an OpenID Connect idtoken and an oAuth2 access token to use Azure AD APIs</h4>
             <a class="btn btn-primary" href="index.php">Click here start again.</a>
         </div>
     </body>
