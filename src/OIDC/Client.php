@@ -57,7 +57,10 @@ class Client implements \microsoft\adalphp\OIDC\ClientInterface {
 
     /** @var string Token endpoint. */
     protected $tokenendpoint = '';
-
+    
+    /** @var string To store AAD or hybrid flow. */
+    protected $authflow = '';
+    
     /** @var array Array of language strings. */
     protected $lang = [
         'invalidendpoint' => 'Invalid Endpoint URI received.',
@@ -164,6 +167,15 @@ class Client implements \microsoft\adalphp\OIDC\ClientInterface {
     }
 
     /**
+     * Set the authflow.
+     *
+     * @param string $resource The redirect URI to set.
+     */
+    public function set_authflow($authflow) {
+        $this->authflow = $authflow;
+    }
+    
+    /**
      * Get the set client ID.
      *
      * @return string The set client ID.
@@ -238,6 +250,11 @@ class Client implements \microsoft\adalphp\OIDC\ClientInterface {
             'nonce' => $nonce,
             'resource' => $this->resource,
         ];
+        
+        if ($this->authflow == 'hybrid') {
+            $params['response_type'] = 'code id_token';
+        }
+        
         $params = array_merge($params, $extraparams);
         return $params;
     }
@@ -489,5 +506,28 @@ class Client implements \microsoft\adalphp\OIDC\ClientInterface {
 
         $returned = $this->httpclient->post($this->tokenendpoint, $params);
         return $this->process_json_response($returned, ['id_token' => null]);
+    }
+    
+    /**
+     * Handle auth response.
+     *
+     * @param array $authparams Array of received auth response parameters.
+     * @return array List of IDToken object, array of token parameters, and stored state parameters.
+     */
+    public function handle_id_token(array $authparams) {
+        // Validate response.
+        if (!isset($authparams['state'])) {
+            throw new ADALPHPException($this->lang['unknownstate'], $authparams);
+        }
+
+        // Look up state.
+        list($stateparams, $nonce) = $this->storage->get_state($authparams['state']);
+
+        // Expire state record.
+        $this->storage->delete_state($nonce);
+
+        $idtoken = $this->process_idtoken($authparams['id_token'], $nonce);
+
+        return [$idtoken, $stateparams];
     }
 }

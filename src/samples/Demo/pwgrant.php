@@ -24,7 +24,7 @@
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
-
+session_start();
 require(__DIR__.'/../../../vendor/autoload.php');
 
 // Construct.
@@ -55,20 +55,25 @@ $returned = $client->rocredsrequest($_POST['username'], $_POST['password']);
 // Process id token.
 $idtoken = \microsoft\adalphp\AAD\IDToken::instance_from_encoded($returned['id_token']);
 
-// Output.
-?>
+$dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
 
-<html>
-    <head>
-        <?php include './header.php'; ?>
-    </head>
-    <body>
-        <div class="container">
-            <br />
-            <h1>Welcome to the PHP Azure AD Demo</h1>
-            <h2>Hello, <?php echo $idtoken->claim('name').' ('.$idtoken->claim('upn').').' ?></h2>
-            <h4>You have successfully authenticated with Azure AD using OpenID Connect. This is just a demo, but the libraries contained in this package will provide an OpenID Connect idtoken and an oAuth2 access token to use Azure AD APIs</h4>
-            <a class="btn btn-primary" href="index.php">Click here start again.</a>
-        </div>
-    </body>
-</html>
+$user = $dbFunc->isUserExist($idtoken->claim('upn'));
+
+if ($user) {
+
+    $adUser = $dbFunc->getAdUser($user['id']);
+
+    if (!$adUser) {
+        $dbFunc->insertAdUser($returned['id_token'], $user['id'], 'idtoken');
+    }
+} else {
+    $dbFunc->insertUser($idtoken->claim('family_name'), $idtoken->claim('given_name'), $idtoken->claim('upn'), '');
+
+    $user = $dbFunc->getUserByEmail($idtoken->claim('upn'));
+    $dbFunc->insertAdUser($returned['id_token'], $user['id'], 'idtoken');
+}
+
+$_SESSION['logged_in'] = 1;
+$_SESSION['user_id'] = $user['id'];
+header('Location: /user.php');
+?>

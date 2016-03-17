@@ -41,7 +41,7 @@ interface ClientInterface {
      * @param \microsoft\adalphp\OIDC\StorageInterface $storage A storage implementation to use.
      */
     public function __construct(HttpClientInterface $httpclient, StorageInterface $storage);
-
+    
     /**
      * Set auth endpoint.
      *

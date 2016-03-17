@@ -20,42 +20,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author James McQuillan <james.mcquillan@remote-learner.net>
+ * @author Sushant Gawali <sushant@introp.net>
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-require(__DIR__.'/../../../vendor/autoload.php');
+session_start();
 
-// Construct.
-$httpclient = new \microsoft\adalphp\HttpClient;
-$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/../storagedb.sqlite');
-$client = new \microsoft\adalphp\AAD\Client($httpclient, $storage);
-
-if (!empty($_GET['type']) && $_GET['type'] === 'Hybrid') {
-    $client->set_authflow('hybrid');
-}
-
-// Set credentials.
-require(__DIR__.'/../config.php');
-if (!defined('ADALPHP_CLIENTID') || empty(ADALPHP_CLIENTID)) {
-	throw new \Exception('No client ID set - please set in config.php');
-}
-$client->set_clientid(ADALPHP_CLIENTID);
-
-if (!defined('ADALPHP_CLIENTSECRET') || empty(ADALPHP_CLIENTSECRET)) {
-	throw new \Exception('No client secret set - please set in config.php');
-}
-$client->set_clientsecret(ADALPHP_CLIENTSECRET);
-
-if (!defined('ADALPHP_CLIENTREDIRECTURI') || empty(ADALPHP_CLIENTREDIRECTURI)) {
-	throw new \Exception('No redirect URI set - please set in config.php');
-}
-$client->set_redirecturi(ADALPHP_CLIENTREDIRECTURI);
-
-// Make request.
-if (!empty($_GET['prompt']) && $_GET['prompt'] === '1') {
-	$client->authrequest(true);
-} else {
-	$client->authrequest();
-}
+unset($_SESSION['user_id']);
+header('Location: /index.php');

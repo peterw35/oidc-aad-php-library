@@ -42,6 +42,9 @@ class Client extends \microsoft\adalphp\OIDC\Client {
     /** @var string The OIDC resource to use. */
     protected $resource = 'https://graph.windows.net';
 
+    /** @var string To store AAD or hybrid flow. */
+    protected $authflow = 'aad';
+    
     /**
      * Make a token request using the resource-owner credentials login flow.
      *

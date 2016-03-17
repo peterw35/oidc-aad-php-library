@@ -27,8 +27,9 @@
 
 require(__DIR__.'/../../../vendor/autoload.php');
 
+global $connection;
 // Set credentials.
-require('/../config.php');
+require_once('/../config.php');
 if (!defined('DB_HOST') || empty(DB_HOST)) {
 	throw new \Exception('No DB HOST set - please set in config.php');
 }
@@ -37,7 +38,7 @@ if (!defined('DB_USER') || empty(DB_USER)) {
 	throw new \Exception('No DB USER set - please set in config.php');
 }
 
-if (!defined('DB_PASSWORD') || empty(DB_PASSWORD)) {
+if (!defined('DB_PASSWORD')) {
 	throw new \Exception('No DB PASSWORD set - please set in config.php');
 }
 
@@ -45,11 +46,12 @@ if (!defined('DB_DATABSE') || empty(DB_DATABSE)) {
 	throw new \Exception('No DB DATABSE set - please set in config.php');
 }
 
-$connection = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
+$connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD);
+
 if (!$connection){
     die("Database Connection Failed" . mysql_error());
 }
-$select_db = mysql_select_db(DB_DATABSE);
+$select_db = mysqli_select_db($connection, DB_DATABSE);
 if (!$select_db){
     die("Database Selection Failed" . mysql_error());
 }

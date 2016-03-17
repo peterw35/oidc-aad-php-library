@@ -27,61 +27,62 @@
 
 namespace microsoft\adalphp\samples\Demo;
 
-require(__DIR__.'/../../../vendor/autoload.php');
+require(__DIR__ . '/../../../vendor/autoload.php');
 
 require('connect.php');
 
-class dbfunctions { 
-    public function  __construct() {}
-    
-    public function isUserExist($emailid){  
-        $query = mysql_query("SELECT * FROM Users WHERE email = '".$emailid."'");  
-        if(mysql_num_rows($query) > 0){  
-            return true;  
-        } else {  
-            return false;  
-        }
+class dbfunctions {
+
+    public function isUserExist($emailid) {
+        $query = "SELECT * FROM Users WHERE email = '" . $emailid . "'";
+        return mysqli_fetch_array(mysqli_query($GLOBALS['connection'], $query), MYSQLI_ASSOC);
     }
-    
-    public function isUserEmailExist($emailid){  
-        $query = "SELECT * FROM Users WHERE email = '".$emailid."'"; 
-        $result = mysql_query($query);
-        if(mysql_num_rows($result) > 0){  
-            return mysql_result($result,0,0);  
-        } else {  
-            return false;  
-        }
-    }
-    
-    public function insertUser($firstname, $lastname, $email, $password){  
-        
+
+    public function insertUser($firstname, $lastname, $email, $password) {
+
         $query = "INSERT INTO `Users` (firstname, lastname, password, email) "
-            . "VALUES ('$firstname', '$lastname', '$password', '$email')";
-        $result = mysql_query($query);
-        
-        return $result;
+                . "VALUES ('$firstname', '$lastname', '$password', '$email')";
+        $result = mysqli_query($GLOBALS['connection'], $query);
+        return mysqli_insert_id($GLOBALS['connection']);
     }
-    
-    public function verifyUser($email, $password){
+
+    public function verifyUser($email, $password) {
         $query = "SELECT * FROM Users WHERE email = '$email' and password = '$password'";
-        $result = mysql_query($query);
-        
-        return $result;  
+        return mysqli_fetch_array(mysqli_query($GLOBALS['connection'], $query), MYSQLI_ASSOC);
     }
-    
-    public function verifyAdUser($id){
-        $query = "SELECT * FROM AdUsers WHERE userId = '$id'";
-        $result = mysql_query($query);
-        
-        return $result;  
+
+    public function getAdUser($id) {
+        $query = "SELECT * FROM AdUsers WHERE userId = " . $id;
+        return mysqli_fetch_array(mysqli_query($GLOBALS['connection'], $query), MYSQLI_ASSOC);
     }
-    
-    public function insertAdUser($tokenparams, $userId){
-        $encodedtokenparams = @json_encode($tokenparams, true);
-        $query = "INSERT INTO `AdUsers` (userId , accessTokenResponse) "
-                . "VALUES ('$userId', '$encodedtokenparams')";
-        $result = mysql_query($query);
-        
-        return $result;  
+
+    public function insertAdUser($tokenparams, $userId, $token_type) {
+
+        if ($token_type == 'id_token') {
+            $query = "INSERT INTO `AdUsers` (userId , idTokenResponse) "
+                    . "VALUES ('$userId', '$tokenparams')";
+        } else {
+            $encodedtokenparams = @json_encode($tokenparams, true);
+            $query = "INSERT INTO `AdUsers` (userId , accessTokenResponse) "
+                    . "VALUES ('$userId', '$encodedtokenparams')";
+        }
+
+        return mysqli_query($GLOBALS['connection'], $query);
     }
+
+    public function getUser($userId) {
+        $query = "SELECT * FROM users WHERE id = " . $userId;
+        return mysqli_fetch_array(mysqli_query($GLOBALS['connection'], $query), MYSQLI_ASSOC);
+    }
+
+    public function getUserByEmail($emailId) {
+        $query = "SELECT * FROM users WHERE email = '" . $emailId . "'";
+        return mysqli_fetch_array(mysqli_query($GLOBALS['connection'], $query), MYSQLI_ASSOC);
+    }
+
+    public function unlinkAdUser($userid) {
+        $query = "DELETE from AdUsers where userId = " . $userid;
+        return mysqli_query($GLOBALS['connection'], $query);
+    }
+
 }

@@ -24,72 +24,180 @@
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
+session_start();
+
+if (isset($_SESSION['user_id'])){
+    unset($_SESSION['user_id']);
+}
+
+require(__DIR__ . '/../../../vendor/autoload.php');
+
+$dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
+
+// If the values are posted, insert them into the database.
+$error = '';
+$email = $firstname = $lastname = $password = '';
+if (isset($_POST['email'])) {
+    
+    $email = $_POST['email'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $password = $_POST['password'];
+    
+    $exist = $dbFunc->isUserExist($_POST['email']);
+
+    if (!$exist) {
+        $result = $dbFunc->insertUser($firstname, $lastname, $email, $password);
+        if ($result) {
+            $_SESSION['logged_in'] = 1;
+            $_SESSION['user_id'] = $result;
+            header('Location: /user.php');
+        } else {
+            $error = 'Error in registering user. Please try again';
+        }
+    } else {
+        $error = 'User already exists. Please use differant email id.';
+    }
+}
+if (isset($_GET['local'])){
+    $user = $dbFunc->verifyUser($_POST['localemail'], $_POST['localpassword']);
+    if ($user) {
+        $_SESSION['user_id'] = $user['id'];
+        header('Location: /user.php');
+    } else {
+        $error = 'Invalid username or password';
+    }
+}
 ?>
 
 <html>
-    <head>
-        <?php require(__DIR__.'/../../../vendor/autoload.php'); ?>
-        <?php include './header.php'; ?>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Welcome to the PHP Azure AD Demo</h1>
-            <h4>This package contains libraries to authenticate with Azure AD using OpenID Connect.</h4>
+    <?php include './header.php'; ?>
 
-            <a class="btn btn-primary" href="login.php?prompt=1&type=AAD">Authorization request login (with login prompt).</a>
-            <a class="btn btn-primary" href="login.php?type=AAD">Authorization request login (using existing session).</a>
-            <br /><br />
-            <a class="btn btn-primary" href="login.php?prompt=1&type=Hybrid">Hybrid Authorization request login (with login prompt).</a>
-            <a class="btn btn-primary" href="login.php?type=Hybrid">Hybrid Authorization request login (using existing session).</a>
-            <br /><br />
-            <a class="btn btn-primary" href="signup.php">Sign Up</a>
-            <br /><br />
+    <div class="container">
 
-            <form class="form-horizontal" action="pwgrant.php" method="post">
-                <fieldset>
-                    <legend>Username/Password Grant</legend>
-                    <div class="form-group">
-                        <label for="username" class="col-lg-2 control-label">Username</label>
-                        <div class="col-lg-3">
-                          <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="password" class="col-lg-2 control-label">Password</label>
-                        <div class="col-lg-3">
-                          <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-3 col-lg-offset-2">
-                          <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
+        <div class="starter-template">
+            <h1>Welcome to the PHP ADAL Demo</h1>
+            <p class="lead">This package contains libraries to authenticate with Azure AD using OpenID Connect.</p>
+        </div>
 
-            <form class="form-horizontal" action="loginlocal.php" method="post">
-                <fieldset>
-                    <legend>Local Account Log in</legend>
-                    <div class="form-group">
-                        <label for="email" class="col-lg-2 control-label">Email</label>
-                        <div class="col-lg-3">
-                          <input type="text" class="form-control" id="localemail" name="localemail" placeholder="Email">
-                        </div>
+        <?php if ($error != '') { ?>
+            <div class="alert alert-danger" role="alert">
+                <h4><?php echo $error ?></h4>
+            </div>
+        <?php }
+        ?>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">AAD Accounts</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h3>Authorization Code Flow </h3>
+                        <p><a class="btn btn-primary" href="login.php?prompt=1&type=AAD" role="button">With Login prompt »</a></p>
+                        <p><a class="btn btn-primary" href="login.php" role="button">With Existing Session »</a></p>
                     </div>
-                    <div class="form-group">
-                        <label for="password" class="col-lg-2 control-label">Password</label>
-                        <div class="col-lg-3">
-                          <input type="password" class="form-control" id="localpassword" name="localpassword" placeholder="Password">
-                        </div>
+                    <div class="col-lg-4">
+                        <h3>Hybrid Flow</h3>
+                        <p><a class="btn btn-primary" href="login.php?prompt=1&type=Hybrid" role="button">With Login prompt »</a></p>
+                        <p><a class="btn btn-primary" href="login.php?type=Hybrid" role="button">With Existing Session »</a></p>
                     </div>
-                    <div class="form-group">
-                        <div class="col-lg-3 col-lg-offset-2">
-                          <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
+                    <div class="col-lg-4">
+                        <h3>Resource Owner Password Credentials Grant</h3>
+                        <form class="form-horizontal" action="pwgrant.php" method="post">
+                            <fieldset>
+                                <div class="form-group">
+
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control" id="username" name="username" placeholder="Office365 Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    <div class="col-lg-10">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Office365 Password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3">
+                                        <button type="submit" class="btn btn-primary">Login</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
                     </div>
-                </fieldset>
-            </form>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Local Accounts</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <form class="form-horizontal" action="index.php?local=1" method="post">
+                            <fieldset>
+                                <legend>Log in</legend>
+                                <div class="form-group">
+                                    <label for="email" class="col-lg-3 control-label">Email</label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control" id="localemail" name="localemail" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="col-lg-3 control-label">Password</label>
+                                    <div class="col-lg-6">
+                                        <input type="password" class="form-control" id="localpassword" name="localpassword" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3 col-lg-offset-3">
+                                        <button type="submit" class="btn btn-primary">Login</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <form class="form-horizontal" action="index.php" method="post">
+                            <fieldset>
+                                <legend>Sign Up</legend>
+                                <div class="form-group">
+                                    <label for="firstname" class="col-lg-3 control-label">First Name</label>
+                                    <div class="col-lg-6">
+                                        <input type="text" value="<?php echo $firstname; ?>" class="form-control" id="firstname" name="firstname" placeholder="First Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="firstname" class="col-lg-3 control-label">Last Name</label>
+                                    <div class="col-lg-6">
+                                        <input type="text" value="<?php echo $lastname; ?>" class="form-control" id="lastname" name="lastname" placeholder="Last Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username" class="col-lg-3 control-label">E-Mail</label>
+                                    <div class="col-lg-6">
+                                        <input type="email" value="<?php echo $email; ?>" class="form-control" id="email" name="email" placeholder="E-Mail">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="col-lg-3 control-label">Password</label>
+                                    <div class="col-lg-6">
+                                        <input type="password" value="<?php echo $password; ?>" class="form-control" id="password" name="password" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3 col-lg-offset-3">
+                                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

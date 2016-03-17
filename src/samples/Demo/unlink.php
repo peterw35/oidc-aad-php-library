@@ -20,39 +20,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author Aashay Zajriya <aashay@introp.net>
+ * @author Sushant Gawali <sushant@introp.net>
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
-
+session_start();
 require(__DIR__.'/../../../vendor/autoload.php');
 
-// Construct.
 $dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
 
-    // If the values are posted, insert them into the database.
-    $email = $dbFunc->isUserExist($_POST['email']);  
-        if(!$email){  
-            $result = $dbFunc->insertUser($_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['password']);
-            if($result){  
-                 echo "<script>alert('Registration Successful')</script>";  
-            }else{  
-                echo "<script>alert('Registration Not Successful')</script>";  
-            }  
-        } 
-        else {  
-            echo "<script>alert('Email Already Exist')</script>";  
-        }
-?>
+if (isset($_SESSION['user_id'])){
+    $userId = $_SESSION['user_id'];
+} else {
+    header('Location: /index.php');
+}
 
-<html>
-    <head>
-        <?php include './header.php'; ?>
-    </head>
-    <body>
-        <div class="container">
-            <br />
-            <a class="btn btn-primary" href="index.php">Click Sign In</a>
-        </div>
-    </body>
-</html>
+$dbFunc->unlinkAdUser($userId);
+header('Location: /user.php');
