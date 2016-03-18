@@ -27,7 +27,7 @@
 session_start();
 require(__DIR__.'/../../../vendor/autoload.php');
 
-$dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
+$db = \microsoft\adalphp\samples\Demo\sqlite::get_db(__DIR__ . '/../storagedb.sqlite');
 
 if (isset($_SESSION['user_id'])){
     $userId = $_SESSION['user_id'];
@@ -35,5 +35,5 @@ if (isset($_SESSION['user_id'])){
     header('Location: /index.php');
 }
 
-$dbFunc->unlinkAdUser($userId);
+$db->unlink_ad_user($userId);
 header('Location: /user.php');

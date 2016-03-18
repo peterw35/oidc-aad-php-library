@@ -26,44 +26,23 @@
  */
 session_start();
 
-if (isset($_SESSION['user_id'])){
+if (isset($_SESSION['user_id'])) {
     unset($_SESSION['user_id']);
 }
 
 require(__DIR__ . '/../../../vendor/autoload.php');
 
-$dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
+$db = \microsoft\adalphp\samples\Demo\sqlite::get_db(__DIR__ . '/../storagedb.sqlite');
 
-// If the values are posted, insert them into the database.
+// Create required tables for first run.
+$db->create_tables();
 $error = '';
-$email = $firstname = $lastname = $password = '';
-if (isset($_POST['email'])) {
-    
-    $email = $_POST['email'];
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $password = $_POST['password'];
-    
-    $exist = $dbFunc->isUserExist($_POST['email']);
-
-    if (!$exist) {
-        $result = $dbFunc->insertUser($firstname, $lastname, $email, $password);
-        if ($result) {
-            $_SESSION['logged_in'] = 1;
-            $_SESSION['user_id'] = $result;
-            header('Location: /user.php');
-        } else {
-            $error = 'Error in registering user. Please try again';
-        }
-    } else {
-        $error = 'User already exists. Please use differant email id.';
-    }
-}
-if (isset($_GET['local'])){
-    $user = $dbFunc->verifyUser($_POST['localemail'], $_POST['localpassword']);
+if (isset($_GET['local'])) {
+    $user = $db->verify_user($_POST['localemail'], $_POST['localpassword']);
     if ($user) {
         $_SESSION['user_id'] = $user['id'];
         header('Location: /user.php');
+        die();
     } else {
         $error = 'Invalid username or password';
     }
@@ -71,22 +50,19 @@ if (isset($_GET['local'])){
 ?>
 
 <html>
-    <?php include './header.php'; ?>
+    <?php include(__DIR__ .'./header.php'); ?>
 
     <div class="container">
-
+        <?php if ($error != '') { ?>
+            <div class="alert alert-danger" role="alert" style="margin-top: 30px">
+                <h4><?php echo $error ?></h4>
+            </div>
+            <?php }
+        ?>
         <div class="starter-template">
             <h1>Welcome to the PHP ADAL Demo</h1>
             <p class="lead">This package contains libraries to authenticate with Azure AD using OpenID Connect.</p>
         </div>
-
-        <?php if ($error != '') { ?>
-            <div class="alert alert-danger" role="alert">
-                <h4><?php echo $error ?></h4>
-            </div>
-        <?php }
-        ?>
-
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">AAD Accounts</h3>
@@ -161,40 +137,8 @@ if (isset($_GET['local'])){
                         </form>
                     </div>
                     <div class="col-lg-6">
-                        <form class="form-horizontal" action="index.php" method="post">
-                            <fieldset>
-                                <legend>Sign Up</legend>
-                                <div class="form-group">
-                                    <label for="firstname" class="col-lg-3 control-label">First Name</label>
-                                    <div class="col-lg-6">
-                                        <input type="text" value="<?php echo $firstname; ?>" class="form-control" id="firstname" name="firstname" placeholder="First Name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="firstname" class="col-lg-3 control-label">Last Name</label>
-                                    <div class="col-lg-6">
-                                        <input type="text" value="<?php echo $lastname; ?>" class="form-control" id="lastname" name="lastname" placeholder="Last Name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="username" class="col-lg-3 control-label">E-Mail</label>
-                                    <div class="col-lg-6">
-                                        <input type="email" value="<?php echo $email; ?>" class="form-control" id="email" name="email" placeholder="E-Mail">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password" class="col-lg-3 control-label">Password</label>
-                                    <div class="col-lg-6">
-                                        <input type="password" value="<?php echo $password; ?>" class="form-control" id="password" name="password" placeholder="Password">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-lg-3 col-lg-offset-3">
-                                        <button type="submit" class="btn btn-primary">Sign Up</button>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
+                        <legend>Sign Up</legend>
+                        <a href="/signup.php" class="btn btn-primary">Sign Up</a>
                     </div>
                 </div>
             </div>

@@ -61,6 +61,9 @@ class Client implements \microsoft\adalphp\OIDC\ClientInterface {
     /** @var string To store AAD or hybrid flow. */
     protected $authflow = '';
     
+    /** @var array of supported auth flows. */
+    protected $supportedauthflows = array("authorization", "hybrid", "rocred");
+    
     /** @var array Array of language strings. */
     protected $lang = [
         'invalidendpoint' => 'Invalid Endpoint URI received.',
@@ -163,16 +166,31 @@ class Client implements \microsoft\adalphp\OIDC\ClientInterface {
      * @param string $resource The redirect URI to set.
      */
     public function set_resource($resource) {
-        $this->resource = $resource;
-    }
+            $this->resource = $resource;
+        }
 
     /**
      * Set the authflow.
      *
-     * @param string $resource The redirect URI to set.
+     * @param string $authflow The authflow to set.
      */
     public function set_authflow($authflow) {
-        $this->authflow = $authflow;
+        
+        if (in_array($authflow, $this->supportedauthflows)) {
+            $this->authflow = $authflow;
+        } else {
+            throw new ADALPHPException('Invalid authflow.');
+        }
+        
+    }
+    
+    /**
+     * Get the authflow.
+     *
+     * @return string $authflow The authflow to get.
+     */
+    public function get_authflow() {
+        return $this->authflow;
     }
     
     /**

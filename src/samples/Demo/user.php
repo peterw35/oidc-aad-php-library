@@ -27,31 +27,35 @@
 session_start();
 require(__DIR__ . '/../../../vendor/autoload.php');
 
-$dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
+$db = \microsoft\adalphp\samples\Demo\sqlite::get_db(__DIR__ . '/../storagedb.sqlite');
 
-
-
-if (isset($_SESSION['user_id'])){
+if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
 } else {
     header('Location: /index.php');
 }
 
+$user = $db->get_user($userId);
 
-$user = $dbFunc->getUser($userId);
+$aduser = $db->get_ad_user($userId);
 
-$aduser = $dbFunc->getAdUser($userId);
-
-if (!$aduser){
+if (!$aduser) {
     $link = '<a href="login.php">Link</a>';
-} else{
+} else {
     $link = '<a href="unlink.php">Unlink</a>';
 }
 ?>
 <html>
-    <?php include './header.php'; ?>
+    <?php include(__DIR__ .'./header.php'); ?>
 
     <div class="container">
+        <?php
+        if (isset($_GET['no_account'])) {
+            ?>
+            <div class="alert alert-danger alert-dismissable" role="alert" style="margin-top: 30px">
+                <h4>This Office 365 account does not exist on local accounts.</h4>
+            </div>
+        <?php } ?>
         <br />
         <h1>Welcome to the PHP Azure AD Demo</h1>
         <br>

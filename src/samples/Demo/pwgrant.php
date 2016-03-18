@@ -55,25 +55,31 @@ $returned = $client->rocredsrequest($_POST['username'], $_POST['password']);
 // Process id token.
 $idtoken = \microsoft\adalphp\AAD\IDToken::instance_from_encoded($returned['id_token']);
 
-$dbFunc = new \microsoft\adalphp\samples\Demo\dbfunctions;
+$db = \microsoft\adalphp\samples\Demo\sqlite::get_db(__DIR__ . '/../storagedb.sqlite');
 
-$user = $dbFunc->isUserExist($idtoken->claim('upn'));
+if (isset($_SESSION['user_id'])) {
+    $user = $db->get_user($_SESSION['user_id']);
+    
+    if ($user['email'] != strtolower($idtoken->claim('upn'))) {
+        header('Location: /user.php?no_account=1');
+        die();
+    }
+}
+
+$user = $db->is_user_exist($idtoken->claim('upn'));
 
 if ($user) {
 
-    $adUser = $dbFunc->getAdUser($user['id']);
+    $adUser = $db->get_ad_user($user['id']);
 
     if (!$adUser) {
-        $dbFunc->insertAdUser($returned['id_token'], $user['id'], 'idtoken');
+        $db->insert_ad_user($returned['id_token'], $user['id'], 'idtoken', $idtoken->claim('upn'));
     }
 } else {
-    $dbFunc->insertUser($idtoken->claim('family_name'), $idtoken->claim('given_name'), $idtoken->claim('upn'), '');
-
-    $user = $dbFunc->getUserByEmail($idtoken->claim('upn'));
-    $dbFunc->insertAdUser($returned['id_token'], $user['id'], 'idtoken');
+    header('Location: /signup.php?firstname=' . $idtoken->claim('family_name') . '&lastname=' . $idtoken->claim('given_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
+    die();
 }
 
-$_SESSION['logged_in'] = 1;
 $_SESSION['user_id'] = $user['id'];
 header('Location: /user.php');
 ?>
