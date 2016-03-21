@@ -32,6 +32,10 @@ $httpclient = new \microsoft\adalphp\HttpClient;
 $storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
 $client = new \microsoft\adalphp\AAD\Client($httpclient, $storage);
 
+if (!empty($_GET['type']) && $_GET['type'] === 'Hybrid') {
+    $client->set_authflow('hybrid');
+}
+
 // Set credentials.
 require(__DIR__.'/config.php');
 if (!defined('ADALPHP_CLIENTID') || empty(ADALPHP_CLIENTID)) {

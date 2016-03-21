@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2016 Micorosft Corporation
  *
@@ -20,42 +21,76 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author James McQuillan <james.mcquillan@remote-learner.net>
+ * @author Aashay Zajriya <aashay@introp.net>
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
-
-require(__DIR__.'/../../vendor/autoload.php');
+session_start();
+require(__DIR__ . '/../../vendor/autoload.php');
 
 // Construct.
 $httpclient = new \microsoft\adalphp\HttpClient;
-$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
+$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__ . '/storagedb.sqlite');
+$db = \microsoft\adalphp\samples\sqlite::get_db(__DIR__ . '/storagedb.sqlite');
 $client = new \microsoft\adalphp\AAD\Client($httpclient, $storage);
 
 // Set credentials.
 require(__DIR__.'/config.php');
+if (!empty($_REQUEST['id_token'])) {
+    $client->set_authflow('hybrid');
+} 
+
 if (!defined('ADALPHP_CLIENTID') || empty(ADALPHP_CLIENTID)) {
-	throw new \Exception('No client ID set - please set in config.php');
+    throw new \Exception('No client ID set - please set in config.php');
 }
 $client->set_clientid(ADALPHP_CLIENTID);
 
 if (!defined('ADALPHP_CLIENTSECRET') || empty(ADALPHP_CLIENTSECRET)) {
-	throw new \Exception('No client secret set - please set in config.php');
+    throw new \Exception('No client secret set - please set in config.php');
 }
 $client->set_clientsecret(ADALPHP_CLIENTSECRET);
 
 if (!defined('ADALPHP_CLIENTREDIRECTURI') || empty(ADALPHP_CLIENTREDIRECTURI)) {
-	throw new \Exception('No redirect URI set - please set in config.php');
+    throw new \Exception('No redirect URI set - please set in config.php');
 }
 $client->set_redirecturi(ADALPHP_CLIENTREDIRECTURI);
-
+$token_type = '';
 // Process response.
-list($idtoken, $tokenparams, $stateparams) = $client->handle_auth_response($_REQUEST);
+if (!empty($_REQUEST['id_token'])) {
+    list($idtoken, $stateparams) = $client->handle_id_token($_REQUEST);
+    $insertAdData = $_REQUEST['id_token'];
+    $token_type = 'id_token';
+} else {
+    list($idtoken, $tokenparams, $stateparams) = $client->handle_auth_response($_REQUEST);
+    $insertAdData = $tokenparams;
+}
 
-// Output.
-echo '<h1>Welcome to the PHP Azure AD Demo</h1>';
-echo '<h2>Hello, '.$idtoken->claim('name').' ('.$idtoken->claim('upn').'). </h2>';
-echo '<h4>You have successfully authenticated with Azure AD using OpenID Connect. '
-			.'This is just a demo, but the libraries contained in this package will provide an OpenID Connect idtoken and an '
-			.'oAuth2 access token to use Azure AD APIs</h4>';
-echo '<a href="index.php">Click here start again.</a>';
+if (isset($_SESSION['user_id'])) {
+    $user = $db->get_user($_SESSION['user_id']);
+    
+    if ($user['email'] != strtolower($idtoken->claim('upn'))) {
+        header('Location: /user.php?no_account=1');
+        die();
+    }
+}
+
+$user = $db->is_user_exist($idtoken->claim('upn'));
+
+if ($user) {
+    $adUser = $db->get_ad_user($user['id']);
+    if (isset($_SESSION['user_id']) && !$adUser) {
+        
+        $db->insert_ad_user($insertAdData, $user['id'], $token_type, $idtoken->claim('upn'));
+        
+    } else if (!$adUser) {
+           header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn'));
+            die();
+     } 
+} else {
+    header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
+    die();
+}
+
+$_SESSION['user_id'] = $user['id'];
+header('Location: /user.php');
+?>

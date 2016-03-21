@@ -20,11 +20,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author James McQuillan <james.mcquillan@remote-learner.net>
+ * @author Aashay Zajriya <aashay@introp.net>
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
-
+session_start();
 require(__DIR__.'/../../vendor/autoload.php');
 
 // Construct.
@@ -55,11 +55,34 @@ $returned = $client->rocredsrequest($_POST['username'], $_POST['password']);
 // Process id token.
 $idtoken = \microsoft\adalphp\AAD\IDToken::instance_from_encoded($returned['id_token']);
 
-// Output.
-echo '<h1>Welcome to the PHP Azure AD Demo</h1>';
-echo '<h2>Hello, '.$idtoken->claim('name').' ('.$idtoken->claim('upn').'). </h2>';
-echo '<h4>You have successfully authenticated with Azure AD using OpenID Connect. '
-			.'This is just a demo, but the libraries contained in this package will provide an OpenID Connect idtoken and an '
-			.'oAuth2 access token to use Azure AD APIs</h4>';
+$db = \microsoft\adalphp\samples\sqlite::get_db(__DIR__ . '/storagedb.sqlite');
 
-echo '<a href="index.php">Click here start again.</a>';
+if (isset($_SESSION['user_id'])) {
+    $user = $db->get_user($_SESSION['user_id']);
+    
+    if ($user['email'] != strtolower($idtoken->claim('upn'))) {
+        header('Location: /user.php?no_account=1');
+        die();
+    }
+}
+
+$user = $db->is_user_exist($idtoken->claim('upn'));
+
+if ($user) {
+    $adUser = $db->get_ad_user($user['id']);
+    if (isset($_SESSION['user_id']) && !$adUser) {
+        
+        $db->insert_ad_user($returned['id_token'], $user['id'], 'id_token', $idtoken->claim('upn'));
+        
+    } else if (!$adUser) {
+           header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn'));
+            die();
+     }
+} else {
+    header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
+    die();
+}
+
+$_SESSION['user_id'] = $user['id'];
+header('Location: /user.php');
+?>
