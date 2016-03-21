@@ -72,7 +72,7 @@ if ($user) {
     $adUser = $db->get_ad_user($user['id']);
     if (isset($_SESSION['user_id']) && !$adUser) {
         
-        $db->insert_ad_user($returned['id_token'], $user['id'], 'id_token', $idtoken->claim('upn'));
+        $db->insert_ad_user($returned['id_token'], $user['id'], $idtoken->claim('upn'), 'id_token');
         
     } else if (!$adUser) {
            header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn'));

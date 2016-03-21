@@ -63,6 +63,7 @@ if (!empty($_REQUEST['id_token'])) {
 } else {
     list($idtoken, $tokenparams, $stateparams) = $client->handle_auth_response($_REQUEST);
     $insertAdData = $tokenparams;
+    $token_type = 'access_token';
 }
 
 if (isset($_SESSION['user_id'])) {
@@ -80,7 +81,7 @@ if ($user) {
     $adUser = $db->get_ad_user($user['id']);
     if (isset($_SESSION['user_id']) && !$adUser) {
         
-        $db->insert_ad_user($insertAdData, $user['id'], $token_type, $idtoken->claim('upn'));
+        $db->insert_ad_user($insertAdData, $user['id'], $idtoken->claim('upn'), $token_type);
         
     } else if (!$adUser) {
            header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn'));

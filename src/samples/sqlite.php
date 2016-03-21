@@ -111,10 +111,14 @@ class sqlite {
         return $result[0];
     }
     
-    public function insert_ad_user($token, $user_id, $token_type = 'access_token', $o365_email) {
+    public function insert_ad_user($token, $user_id, $o365_email, $token_type = 'access_token') {
         
         $sql = 'INSERT INTO ad_users(user_id, token, token_type, o365_email) values (:user_id, :token, :token_type, :o365_email)';
         $stmt = $this->db->prepare($sql);
+        
+        if ($token_type != 'id_token') {
+            $token = @json_encode($token, true);
+        }
         $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
         $stmt->bindParam(':token', $token, \PDO::PARAM_STR);
         $stmt->bindParam(':token_type', $token_type, \PDO::PARAM_STR);
