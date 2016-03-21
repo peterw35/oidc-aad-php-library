@@ -88,7 +88,7 @@ if (isset($_POST['email'])) {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="firstname" class="col-lg-3 control-label">Last Name</label>
+                    <label for="lastname" class="col-lg-3 control-label">Last Name</label>
                     <div class="col-lg-6">
                         <input type="text" value="<?php echo isset($_GET['lastname']) ? $_GET['lastname'] : $lastname; ?>" class="form-control" id="lastname" name="lastname" placeholder="Last Name">
                     </div>

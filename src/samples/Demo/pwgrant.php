@@ -70,13 +70,18 @@ $user = $db->is_user_exist($idtoken->claim('upn'));
 
 if ($user) {
 
-    $adUser = $db->get_ad_user($user['id']);
+    if (isset($_SESSION['user_id'])) {
+        $adUser = $db->get_ad_user($user['id']);
 
-    if (!$adUser) {
-        $db->insert_ad_user($returned['id_token'], $user['id'], 'idtoken', $idtoken->claim('upn'));
+        if (!$adUser) {
+            $db->insert_ad_user($returned['id_token'], $user['id'], 'id_token', $idtoken->claim('upn'));
+        }
+    } else {
+       header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
+       die();    
     }
 } else {
-    header('Location: /signup.php?firstname=' . $idtoken->claim('family_name') . '&lastname=' . $idtoken->claim('given_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
+    header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
     die();
 }
 
