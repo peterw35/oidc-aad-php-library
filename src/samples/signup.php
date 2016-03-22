@@ -31,6 +31,8 @@ $db = \microsoft\adalphp\samples\sqlite::get_db(__DIR__ . '/storagedb.sqlite');
 
 $error = '';
 $email = $firstname = $lastname = $password = '';
+include(__DIR__ .'./header.php');
+
 if (isset($_POST['email'])) {
 
     $email = $_POST['email'];
@@ -54,7 +56,7 @@ if (isset($_POST['email'])) {
             }
             if ($result) {
                 $_SESSION['user_id'] = $result;
-                header('Location: /user.php');
+                header('Location: ' .SCRIPT_ROOT. 'user.php');
                 die();
             } else {
                 $error = 'Error in registering user. Please try again';
@@ -67,7 +69,6 @@ if (isset($_POST['email'])) {
 ?>
 
 <html>
-    <?php include(__DIR__ .'./header.php'); ?>
 
     <div class="container">
         <?php if ($error != '') { ?>

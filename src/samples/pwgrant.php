@@ -61,7 +61,7 @@ if (isset($_SESSION['user_id'])) {
     $user = $db->get_user($_SESSION['user_id']);
     
     if ($user['email'] != strtolower($idtoken->claim('upn'))) {
-        header('Location: /user.php?no_account=1');
+        header('Location: ' . SCRIPT_ROOT . 'user.php?no_account=1');
         die();
     }
 }
@@ -80,7 +80,7 @@ if ($user) {
                       'addata' => $returned['id_token'],
                       'tokentype' => 'id_token');
         $_SESSION['data'] = json_encode($data);
-        header('Location: /link.php');
+        header('Location: ' . SCRIPT_ROOT . 'link.php');
         die();
      }
 } else {
@@ -89,10 +89,10 @@ if ($user) {
                   'addata' => $returned['id_token'],
                   'tokentype' => 'id_token');
     $_SESSION['data'] = json_encode($data);
-    header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
+    header('Location: ' . SCRIPT_ROOT . 'signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
     die();
 }
 
 $_SESSION['user_id'] = $user['id'];
-header('Location: /user.php');
+header('Location: ' . SCRIPT_ROOT . 'user.php');
 ?>

@@ -26,14 +26,14 @@
  */
 session_start();
 require(__DIR__.'/../../vendor/autoload.php');
-
+require(__DIR__.'/config.php');
 $db = \microsoft\adalphp\samples\sqlite::get_db(__DIR__ . '/storagedb.sqlite');
 
 if (isset($_SESSION['user_id'])){
     $userId = $_SESSION['user_id'];
 } else {
-    header('Location: /index.php');
+    header('Location: ' . SCRIPT_ROOT . 'index.php');
 }
 
 $db->unlink_ad_user($userId);
-header('Location: /user.php');
+header('Location: ' . SCRIPT_ROOT . 'user.php');
