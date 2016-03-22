@@ -28,7 +28,6 @@
 
 session_start();
 require(__DIR__ . '/../../vendor/autoload.php');
-include(__DIR__ .'./header.php');
 
 $db = \microsoft\adalphp\samples\sqlite::get_db(__DIR__ . '/storagedb.sqlite');
 if (isset($_GET['link_check']) && isset($_SESSION['data'])) {
@@ -36,12 +35,13 @@ if (isset($_GET['link_check']) && isset($_SESSION['data'])) {
     $db->insert_ad_user($data['addata'], $data['userid'], $data['emailid'], $data['tokentype']);
     $_SESSION['user_id'] = $data['userid'];
     unset($_SESSION['data']);
-    header('Location: ' . SCRIPT_ROOT . 'user.php');
+    header('Location: ./user.php');
     die();
 }
 ?>
 
 <html>
+    <?php include(__DIR__ .'./header.php'); ?>
 
     <div class="container">
         <div class="starter-template">
@@ -51,8 +51,8 @@ if (isset($_GET['link_check']) && isset($_SESSION['data'])) {
                         Do you want to link them?
                     </p>
                     <p>
-                        <a class="btn btn-primary" href="<?php echo SCRIPT_ROOT. 'link.php?link_check=1'; ?>" role="button">Yes</a>
-                        <a class="btn btn-primary" href="<?php echo SCRIPT_ROOT. 'index.php'; ?>" role="button">No</a>
+                        <a class="btn btn-primary" href="link.php?link_check=1" role="button">Yes</a>
+                        <a class="btn btn-primary" href="index.php" role="button">No</a>
                     </p>
                 </div>
             </div>

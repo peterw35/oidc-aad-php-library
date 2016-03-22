@@ -32,7 +32,7 @@ $db = \microsoft\adalphp\samples\sqlite::get_db(__DIR__ . '/storagedb.sqlite');
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
 } else {
-    header('Location: ' . SCRIPT_ROOT . 'index.php');
+    header('Location: ./index.php');
 }
 
 $user = $db->get_user($userId);

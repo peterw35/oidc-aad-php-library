@@ -26,6 +26,6 @@
  */
 
 session_start();
-require(__DIR__.'/config.php');
+
 unset($_SESSION['user_id']);
-header('Location: ' . SCRIPT_ROOT . 'index.php');
+header('Location: ./index.php');

@@ -24,14 +24,13 @@
  * @license MIT
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
-require(__DIR__.'/config.php');
 ?>
 <head>
-    <link rel="stylesheet" type="text/css" href="<?php echo SCRIPT_ROOT. 'css/bootstrap.css'; ?>"/>
-    <link rel="stylesheet" type="text/css" href="<?php echo SCRIPT_ROOT. '/css/bootstrap-theme.css'; ?>"/>
-    <script type="text/javascript" src="<?php echo SCRIPT_ROOT. '/js/jquery-1.10.2.js'; ?>"></script>
-    <script type="text/javascript" src="<?php echo SCRIPT_ROOT. '/js/jquery.validate.js'; ?>"></script>
-    <script type="text/javascript" src="<?php echo SCRIPT_ROOT. '/js/bootstrap.js'; ?>"></script>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap-theme.css"/>
+    <script type="text/javascript" src="./js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="./js/jquery.validate.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.js"></script>
     <style type="text/css">
         body {
             padding-top: 50px;
@@ -52,12 +51,12 @@ require(__DIR__.'/config.php');
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?php echo SCRIPT_ROOT; ?>">ADAL PHP Demo</a>
+                <a class="navbar-brand" href="./index.php">ADAL PHP Demo</a>
             </div>
             <?php if (isset($_SESSION['user_id'])) { ?>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav pull-right">
-                        <li><a href="<?php echo SCRIPT_ROOT. 'logout.php'; ?>">Logout</a></li>
+                        <li><a href="./logout.php">Logout</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             <?php } ?>

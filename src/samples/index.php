@@ -41,7 +41,7 @@ if (isset($_GET['local'])) {
     $user = $db->verify_user($_POST['localemail'], $_POST['localpassword']);
     if ($user) {
         $_SESSION['user_id'] = $user['id'];
-        header('Location: ' . SCRIPT_ROOT . 'user.php');
+        header('Location: ./user.php');
         die();
     } else {
         $error = 'Invalid username or password';
@@ -138,7 +138,7 @@ if (isset($_GET['local'])) {
                     </div>
                     <div class="col-lg-6">
                         <legend>Sign Up</legend>
-                        <a href="<?php echo SCRIPT_ROOT. 'signup.php'; ?>" class="btn btn-primary">Sign Up</a>
+                        <a href="signup.php" class="btn btn-primary">Sign Up</a>
                     </div>
                 </div>
             </div>
