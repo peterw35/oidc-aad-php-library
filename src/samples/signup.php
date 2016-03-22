@@ -80,7 +80,7 @@ if (isset($_POST['email'])) {
         if (isset($_GET['new_acc'])) {
             ?>
             <div class="alert alert-info" role="alert" style="margin-top: 30px">
-                <h4>This account does not exist. Please sign up to create account.</h4>
+                <h4>This account does not exist. Please sign up to create the account.</h4>
             </div>
         <?php }
         ?>

@@ -60,12 +60,12 @@ if (isset($_GET['local'])) {
             <?php }
         ?>
         <div class="starter-template">
-            <h1>Welcome to the PHP ADAL Demo</h1>
-            <p class="lead">This package contains libraries to authenticate with Azure AD using OpenID Connect.</p>
+            <h1>Welcome to the PHP ADAL Sample App</h1>
+            <p class="lead">This app demonstrates how to use the PHP ADAL library to implement connected accounts and various authentication flows.</p>
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">AAD Accounts</h3>
+                <h3 class="panel-title">Office 365 Accounts</h3>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -86,13 +86,13 @@ if (isset($_GET['local'])) {
                                 <div class="form-group">
 
                                     <div class="col-lg-10">
-                                        <input type="text" class="form-control" id="username" name="username" placeholder="Office365 Email">
+                                        <input type="text" class="form-control" id="username" name="username" placeholder="Office 365 Email">
                                     </div>
                                 </div>
                                 <div class="form-group">
 
                                     <div class="col-lg-10">
-                                        <input type="password" class="form-control" id="password" name="password" placeholder="Office365 Password">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Office 365 Password">
                                     </div>
                                 </div>
                                 <div class="form-group">

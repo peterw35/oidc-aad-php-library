@@ -51,7 +51,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="./index.php">ADAL PHP Demo</a>
+                <a class="navbar-brand" href="./index.php">PHP ADAL Sample App</a>
             </div>
             <?php if (isset($_SESSION['user_id'])) { ?>
                 <div id="navbar" class="collapse navbar-collapse">
