@@ -84,10 +84,20 @@ if ($user) {
         $db->insert_ad_user($insertAdData, $user['id'], $idtoken->claim('upn'), $token_type);
         
     } else if (!$adUser) {
-           header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn'));
-            die();
+        $data = array('userid' => $user['id'],
+                      'emailid' => $idtoken->claim('upn'),
+                      'addata' => $insertAdData,
+                      'tokentype' => $token_type);
+        $_SESSION['data'] = json_encode($data);
+        header('Location: /link.php');
+        die();
      } 
 } else {
+    $data = array('userid' => $user['id'],
+                  'emailid' => $idtoken->claim('upn'),
+                  'addata' => $insertAdData,
+                  'tokentype' => $token_type);
+    $_SESSION['data'] = json_encode($data);
     header('Location: /signup.php?firstname=' . $idtoken->claim('given_name') . '&lastname=' . $idtoken->claim('family_name') . '&email=' .$idtoken->claim('upn') . '&new_acc=1');
     die();
 }

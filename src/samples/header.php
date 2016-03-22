@@ -26,16 +26,11 @@
  */
 ?>
 <head>
-    <?php if (isset($_SERVER['HTTP_HOST'])) { 
-        $hostname = $_SERVER['HTTP_HOST'];
-     } else {
-         $hostname = '';
-     }?>
-    <link rel="stylesheet" type="text/css" href="<?php $hostname ?>/css/bootstrap.css"/>
-    <link rel="stylesheet" type="text/css" href="<?php $hostname ?>/css/bootstrap-theme.css"/>
-    <script type="text/javascript" src="<?php $hostname ?>/js/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="<?php $hostname ?>/js/jquery.validate.js"></script>
-    <script type="text/javascript" src="<?php $hostname ?>/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.css"/>
+    <script type="text/javascript" src="/js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="/js/jquery.validate.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
     <style type="text/css">
         body {
             padding-top: 50px;

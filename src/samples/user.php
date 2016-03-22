@@ -53,7 +53,7 @@ if (!$aduser) {
         if (isset($_GET['no_account'])) {
             ?>
             <div class="alert alert-danger alert-dismissable" role="alert" style="margin-top: 30px">
-                <h4>This Office 365 account does not exist on local accounts.</h4>
+                <h4>The email ids of local account and Office 365 account does not match.</h4>
             </div>
         <?php } ?>
         <br />
@@ -65,21 +65,19 @@ if (!$aduser) {
         <br>
         <br>
         <h4>Following are the connected Office 365 accounts :</h4>
-    </p>
-    <table class="table">
-        <thead> 
-            <tr> 
-                <th>Account</th> 
-                <th>Link / Unlink</th>  
-            </tr> 
-        </thead> 
-        <tbody> 
-            <tr>  
-                <td>Office 365</td> 
-                <td><?php echo $link; ?></td> 
-            </tr> 
-        </tbody> 
-    </table>
-</div>
-
+        <table class="table">
+            <thead> 
+                <tr> 
+                    <th>Account</th> 
+                    <th>Link / Unlink</th>  
+                </tr> 
+            </thead> 
+            <tbody> 
+                <tr>  
+                    <td>Office 365</td> 
+                    <td><?php echo $link; ?></td> 
+                </tr> 
+            </tbody> 
+        </table>
+    </div>
 </html>

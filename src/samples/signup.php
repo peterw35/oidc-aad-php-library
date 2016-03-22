@@ -46,6 +46,12 @@ if (isset($_POST['email'])) {
 
         if (!$exist) {
             $result = $db->insert_user($firstname, $lastname, $email, $password);
+            if (isset($_SESSION['data'])) 
+            {
+                $data = json_decode($_SESSION['data'],TRUE);
+                $db->insert_ad_user($data['addata'], $result, $data['emailid'], $data['tokentype']);
+                unset($_SESSION['data']);
+            }
             if ($result) {
                 $_SESSION['user_id'] = $result;
                 header('Location: /user.php');
@@ -61,7 +67,7 @@ if (isset($_POST['email'])) {
 ?>
 
 <html>
-    <?php include './header.php'; ?>
+    <?php include(__DIR__ .'./header.php'); ?>
 
     <div class="container">
         <?php if ($error != '') { ?>
