@@ -111,7 +111,7 @@ class AADClientTest extends \PHPUnit_Framework_TestCase {
         $returned = $this->client->rocredsrequest('o365_email', 'o365_password');
         
         // Test access token.
-        //$this->assertEquals($returned, $token['access_token']);
+        $this->assertEquals($returned, $token['access_token']);
         
         $id_token = \microsoft\adalphp\AAD\IDToken::instance_from_encoded($returned['id_token']);
 
