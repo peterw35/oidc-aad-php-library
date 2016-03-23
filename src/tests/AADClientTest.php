@@ -43,7 +43,7 @@ class AADClientTest extends \PHPUnit_Framework_TestCase {
         
         $this->httpclient = new \microsoft\adalphp\tests\MockHttpClient();
         $this->storage = new \microsoft\adalphp\tests\MockStorage();
-        $this->client = new \microsoft\adalphp\OIDC\Client($this->httpclient, $this->storage);
+        $this->client = new \microsoft\adalphp\AAD\Client($this->httpclient, $this->storage);
     }
     
     /**
@@ -90,10 +90,12 @@ class AADClientTest extends \PHPUnit_Framework_TestCase {
             'name' => 'foo bar',
             'unique_name' => 'foobar@test.onmicrosoft.com'
         );
-        
-        $tokens['access_token'] = $access_token;
-        $tokens['id_token'] = $id_token;
-        $tokens['id_token_claims'] = $id_token_claims;
+
+        $tokens['data'] = [
+            [   'access_token' => $access_token,
+                'id_token' => $id_token,
+                'id_token_claims' => $id_token_claims]
+        ];
         
         return $tokens;
     }
@@ -102,7 +104,7 @@ class AADClientTest extends \PHPUnit_Framework_TestCase {
      * Test resource owner credentials flow.
      * @dataProvider dataprovider_token
      */
-    public function test_rocred_flow($token, $expectedexception) {
+    public function test_rocred_flow($token) {
      
         $this->httpclient->set_response(json_encode($token['access_token'], true));
         
