@@ -28,9 +28,9 @@
 <head>
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="./css/bootstrap-theme.css"/>
-    <script type="text/javascript" src="./js/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="./js/jquery.validate.js"></script>
-    <script type="text/javascript" src="./js/bootstrap.js"></script>
+    <script type="text/javascript" src="./js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="./js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
     <style type="text/css">
         body {
             padding-top: 50px;
