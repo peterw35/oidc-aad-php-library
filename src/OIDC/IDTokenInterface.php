@@ -25,7 +25,7 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\OIDC;
+namespace remotelearner\aadsample\OIDC;
 
 /**
  * Interface defining an IDToken.
@@ -77,7 +77,7 @@ interface IDTokenInterface {
      * Construct an IDToken object from an encoded string.
      *
      * @param string $encoded An encoded idtoken.
-     * @return \microsoft\adalphp\OIDC\IDTokenInterface A constructed IDToken object.
+     * @return \remotelearner\aadsample\OIDC\IDTokenInterface A constructed IDToken object.
      */
     public static function instance_from_encoded($encoded);
 }

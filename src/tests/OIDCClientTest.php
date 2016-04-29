@@ -25,12 +25,12 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\tests;
+namespace remotelearner\aadsample\tests;
 
 /**
  * Tests Client.
  *
- * @group adalphp
+ * @group aadsample
  * @codeCoverageIgnore
  */
 class OIDCClientTest extends \PHPUnit_Framework_TestCase {
@@ -38,9 +38,9 @@ class OIDCClientTest extends \PHPUnit_Framework_TestCase {
      * Test getting and setting credentials.
      */
     public function test_creds_getters_and_setters() {
-        $httpclient = new \microsoft\adalphp\tests\MockHttpClient();
-        $storage = new \microsoft\adalphp\tests\MockStorage();
-        $client = new \microsoft\adalphp\OIDC\Client($httpclient, $storage);
+        $httpclient = new \remotelearner\aadsample\tests\MockHttpClient();
+        $storage = new \remotelearner\aadsample\tests\MockStorage();
+        $client = new \remotelearner\aadsample\OIDC\Client($httpclient, $storage);
 
         $this->assertNull($client->get_clientid());
         $this->assertNull($client->get_clientsecret());
@@ -72,17 +72,17 @@ class OIDCClientTest extends \PHPUnit_Framework_TestCase {
 
         $tests['oneinvalid'] = [
             ['auth' => 100],
-            ['\microsoft\adalphp\ADALPHPException', 'Invalid Endpoint URI received.']
+            ['\remotelearner\aadsample\AADSAMPLEException', 'Invalid Endpoint URI received.']
         ];
 
         $tests['oneinvalidonevalid1'] = [
             ['auth' => 100, 'token' => 'http://example.com/token'],
-            ['\microsoft\adalphp\ADALPHPException', 'Invalid Endpoint URI received.']
+            ['\remotelearner\aadsample\AADSAMPLEException', 'Invalid Endpoint URI received.']
         ];
 
         $tests['oneinvalidonevalid2'] = [
             ['token' => 'http://example.com/token', 'auth' => 100],
-            ['\microsoft\adalphp\ADALPHPException', 'Invalid Endpoint URI received.']
+            ['\remotelearner\aadsample\AADSAMPLEException', 'Invalid Endpoint URI received.']
         ];
 
         $tests['onevalid'] = [
@@ -107,9 +107,9 @@ class OIDCClientTest extends \PHPUnit_Framework_TestCase {
         if (!empty($expectedexception)) {
             $this->setExpectedException($expectedexception[0], $expectedexception[1]);
         }
-        $httpclient = new \microsoft\adalphp\tests\MockHttpClient();
-        $storage = new \microsoft\adalphp\tests\MockStorage();
-        $client = new \microsoft\adalphp\OIDC\Client($httpclient, $storage);
+        $httpclient = new \remotelearner\aadsample\tests\MockHttpClient();
+        $storage = new \remotelearner\aadsample\tests\MockStorage();
+        $client = new \remotelearner\aadsample\OIDC\Client($httpclient, $storage);
 
         if (isset($endpoints['auth'])) {
             $client->set_authendpoint($endpoints['auth']);

@@ -25,12 +25,12 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\tests;
+namespace remotelearner\aadsample\tests;
 
 /**
  * @codeCoverageIgnore
  */
-class MockStorage implements \microsoft\adalphp\OIDC\StorageInterface {
+class MockStorage implements \remotelearner\aadsample\OIDC\StorageInterface {
     /**
      * Constructor.
      *

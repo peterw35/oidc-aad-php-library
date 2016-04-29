@@ -25,14 +25,14 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\AAD;
+namespace remotelearner\aadsample\AAD;
 
-use microsoft\adalphp\ADALPHPException;
+use remotelearner\aadsample\AADSAMPLEException;
 
 /**
  * Azure AD specific IDToken implementation.
  */
-class IDToken extends \microsoft\adalphp\OIDC\IDToken {
+class IDToken extends \remotelearner\aadsample\OIDC\IDToken {
     /**
      * Get a sensible username for the user represented by the idtoken.
      *
@@ -57,16 +57,16 @@ class IDToken extends \microsoft\adalphp\OIDC\IDToken {
      * Get current AAD signing keys.
      *
      * @param string $tenantid The tenant ID.
-     * @param \microsoft\adalphp\HttpClientInterface $httpclient HTTP Client instance.
+     * @param \remotelearner\aadsample\HttpClientInterface $httpclient HTTP Client instance.
      * @return array Array of keys.
      */
-    public static function get_keys(\microsoft\adalphp\HttpClientInterface $httpclient, $tenantid = null) {
+    public static function get_keys(\remotelearner\aadsample\HttpClientInterface $httpclient, $tenantid = null) {
         if (!empty($tenantid)) {
             $url = 'https://login.windows.net/'.$tenantid.'/.well-known/openid-configuration';
             $oidcconfig = $httpclient->get($url);
             $oidcconfig = @json_decode($oidcconfig, true);
             if (empty($oidcconfig) || !is_array($oidcconfig) || !isset($oidcconfig['jwks_uri'])) {
-                throw new ADALPHPException('Could not get openid connect config (1).');
+                throw new AADSAMPLEException('Could not get openid connect config (1).');
             }
             $jwks_uri = $oidcconfig['jwks_uri'];
         } else {
@@ -76,7 +76,7 @@ class IDToken extends \microsoft\adalphp\OIDC\IDToken {
         $keydata = $httpclient->get($oidcconfig['jwks_uri']);
         $keydata = @json_decode($keydata, true);
         if (empty($keydata) || !is_array($keydata) || !isset($keydata['keys'])) {
-            throw new ADALPHPException('Could not get openid connect config (2).');
+            throw new AADSAMPLEException('Could not get openid connect config (2).');
         }
 
         $keys = [];

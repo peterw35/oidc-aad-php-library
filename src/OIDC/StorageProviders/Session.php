@@ -25,12 +25,12 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\OIDC\StorageProviders;
+namespace remotelearner\aadsample\OIDC\StorageProviders;
 
 /**
  * OIDC Storage implementation using a sqlite database.
  */
-class Session implements \microsoft\adalphp\OIDC\StorageInterface {
+class Session implements \remotelearner\aadsample\OIDC\StorageInterface {
     /**
      * Constructor.
      *

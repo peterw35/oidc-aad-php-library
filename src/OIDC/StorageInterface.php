@@ -25,7 +25,7 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\OIDC;
+namespace remotelearner\aadsample\OIDC;
 
 /**
  * Interface defining storage for OIDC.

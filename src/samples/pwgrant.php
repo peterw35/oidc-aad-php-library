@@ -28,32 +28,32 @@
 require(__DIR__.'/../../vendor/autoload.php');
 
 // Construct.
-$httpclient = new \microsoft\adalphp\HttpClient;
-$storage = new \microsoft\adalphp\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
-$client = new \microsoft\adalphp\AAD\Client($httpclient, $storage);
+$httpclient = new \remotelearner\aadsample\HttpClient;
+$storage = new \remotelearner\aadsample\OIDC\StorageProviders\SQLite(__DIR__.'/storagedb.sqlite');
+$client = new \remotelearner\aadsample\AAD\Client($httpclient, $storage);
 
 // Set credentials.
 require(__DIR__.'/config.php');
-if (!defined('ADALPHP_CLIENTID') || empty(ADALPHP_CLIENTID)) {
+if (!defined('AADSAMPLE_CLIENTID') || empty(AADSAMPLE_CLIENTID)) {
 	throw new \Exception('No client ID set - please set in config.php');
 }
-$client->set_clientid(ADALPHP_CLIENTID);
+$client->set_clientid(AADSAMPLE_CLIENTID);
 
-if (!defined('ADALPHP_CLIENTSECRET') || empty(ADALPHP_CLIENTSECRET)) {
+if (!defined('AADSAMPLE_CLIENTSECRET') || empty(AADSAMPLE_CLIENTSECRET)) {
 	throw new \Exception('No client secret set - please set in config.php');
 }
-$client->set_clientsecret(ADALPHP_CLIENTSECRET);
+$client->set_clientsecret(AADSAMPLE_CLIENTSECRET);
 
-if (!defined('ADALPHP_CLIENTREDIRECTURI') || empty(ADALPHP_CLIENTREDIRECTURI)) {
+if (!defined('AADSAMPLE_CLIENTREDIRECTURI') || empty(AADSAMPLE_CLIENTREDIRECTURI)) {
 	throw new \Exception('No redirect URI set - please set in config.php');
 }
-$client->set_redirecturi(ADALPHP_CLIENTREDIRECTURI);
+$client->set_redirecturi(AADSAMPLE_CLIENTREDIRECTURI);
 
 // Make request.
 $returned = $client->rocredsrequest($_POST['username'], $_POST['password']);
 
 // Process id token.
-$idtoken = \microsoft\adalphp\AAD\IDToken::instance_from_encoded($returned['id_token']);
+$idtoken = \remotelearner\aadsample\AAD\IDToken::instance_from_encoded($returned['id_token']);
 
 // Output.
 echo '<h1>Welcome to the PHP Azure AD Demo</h1>';

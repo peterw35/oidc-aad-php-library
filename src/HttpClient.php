@@ -25,14 +25,14 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp;
+namespace remotelearner\aadsample;
 
-use microsoft\adalphp\ADALPHPException;
+use remotelearner\aadsample\AADSAMPLEException;
 
 /**
  * Basic HttpClient implementation with curl.
  */
-class HttpClient implements \microsoft\adalphp\HttpClientInterface {
+class HttpClient implements \remotelearner\aadsample\HttpClientInterface {
     /**
      * POST request.
      *
@@ -99,7 +99,7 @@ class HttpClient implements \microsoft\adalphp\HttpClientInterface {
                 break;
 
             default:
-                throw new ADALPHPException('Unsupported request method.');
+                throw new AADSAMPLEException('Unsupported request method.');
         }
 
         curl_setopt_array($ch, $curlopts);

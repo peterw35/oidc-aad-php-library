@@ -25,9 +25,9 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp;
+namespace remotelearner\aadsample;
 
-use microsoft\adalphp\ADALPHPException;
+use remotelearner\aadsample\AADSAMPLEException;
 
 /**
  * Class for working with JWTs.
@@ -85,26 +85,26 @@ class JWT {
      */
     protected static function decode($encoded, array $keys = array()) {
         if (empty($encoded) || !is_string($encoded)) {
-            throw new ADALPHPException(static::$lang['errorjwtempty']);
+            throw new AADSAMPLEException(static::$lang['errorjwtempty']);
         }
         $jwtparts = explode('.', $encoded);
         if (count($jwtparts) !== 3) {
-            throw new ADALPHPException(static::$lang['errorjwtmalformed']);
+            throw new AADSAMPLEException(static::$lang['errorjwtmalformed']);
         }
 
         $header = static::decode_part($jwtparts[0]);
         if (empty($header)) {
-            throw new ADALPHPException(static::$lang['errorjwtcouldnotreadheader']);
+            throw new AADSAMPLEException(static::$lang['errorjwtcouldnotreadheader']);
         }
         if (!isset($header['alg'])) {
-            throw new ADALPHPException(static::$lang['errorjwtinvalidheader']);
+            throw new AADSAMPLEException(static::$lang['errorjwtinvalidheader']);
         }
 
         static::verify($jwtparts[0].'.'.$jwtparts[1], $jwtparts[2], $keys, $header['alg']);
 
         $body = static::decode_part($jwtparts[1]);
         if (empty($body)) {
-            throw new ADALPHPException(static::$lang['errorjwtbadpayload']);
+            throw new AADSAMPLEException(static::$lang['errorjwtbadpayload']);
         }
 
         return [$header, $body];
@@ -113,7 +113,7 @@ class JWT {
     /**
      * Verify the JWT.
      *
-     * @throws ADALPHPException If verification fails.
+     * @throws AADSAMPLEException If verification fails.
      * @param string $payload Encoded JWT payload.
      * @param string $signature Encoded signature.
      * @param string $keys Public signing keys.
@@ -123,19 +123,19 @@ class JWT {
     protected static function verify($payload, $signature, $keys, $alg) {
         $signature = static::urlsafebase64decode($signature);
         if (!empty($keys) && trim($signature) === '') {
-            throw new ADALPHPException('Required JWT signature not received.');
+            throw new AADSAMPLEException('Required JWT signature not received.');
         }
 
         switch ($alg) {
             case 'none':
                 if (!empty($keys)) {
-                    throw new ADALPHPException('Unsigned JWT received when key was provided.');
+                    throw new AADSAMPLEException('Unsigned JWT received when key was provided.');
                 }
                 return true;
 
             case 'RS256':
                 if (empty($keys)) {
-                    throw new ADALPHPException('Key required for signed JWT.');
+                    throw new AADSAMPLEException('Key required for signed JWT.');
                 }
                 $verified = false;
                 foreach ($keys as $key) {
@@ -145,12 +145,12 @@ class JWT {
                     }
                 }
                 if ($verified === false) {
-                    throw new ADALPHPException('JWT signature not verified.');
+                    throw new AADSAMPLEException('JWT signature not verified.');
                 }
                 return true;
 
             default:
-                throw new ADALPHPException(static::$lang['errorjwtunsupportedalg'], $alg);
+                throw new AADSAMPLEException(static::$lang['errorjwtunsupportedalg'], $alg);
         }
     }
 
@@ -184,7 +184,7 @@ class JWT {
      * Create an instance of the class from an encoded JWT string.
      *
      * @param string $encoded The encoded JWT.
-     * @return \microsoft\adalphp\JWT A JWT instance.
+     * @return \remotelearner\aadsample\JWT A JWT instance.
      */
     public static function instance_from_encoded($encoded) {
         list($header, $body) = static::decode($encoded);

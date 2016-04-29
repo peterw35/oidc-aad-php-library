@@ -1,5 +1,5 @@
 <?php
 
-define('ADALPHP_CLIENTID', '');
-define('ADALPHP_CLIENTSECRET', '');
-define('ADALPHP_CLIENTREDIRECTURI', '');
+define('AADSAMPLE_CLIENTID', '');
+define('AADSAMPLE_CLIENTSECRET', '');
+define('AADSAMPLE_CLIENTREDIRECTURI', '');

@@ -25,12 +25,12 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\OIDC;
+namespace remotelearner\aadsample\OIDC;
 
 /**
  * IDToken implementation based on JWT.
  */
-class IDToken extends \microsoft\adalphp\JWT implements \microsoft\adalphp\OIDC\IDTokenInterface {
+class IDToken extends \remotelearner\aadsample\JWT implements \remotelearner\aadsample\OIDC\IDTokenInterface {
     /**
      * Get a sensible username for the user represented by the idtoken.
      *
@@ -106,7 +106,7 @@ class IDToken extends \microsoft\adalphp\JWT implements \microsoft\adalphp\OIDC\
      *
      * @param string $encoded The encoded JWT.
      * @param array $keys Array of keys to verify JWT. At least one key must verify.
-     * @return \microsoft\adalphp\JWT A JWT instance.
+     * @return \remotelearner\aadsample\JWT A JWT instance.
      */
     public static function instance_from_encoded($encoded, array $keys = array()) {
         list($header, $body) = static::decode($encoded, $keys);

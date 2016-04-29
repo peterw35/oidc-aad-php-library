@@ -25,7 +25,7 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp;
+namespace remotelearner\aadsample;
 
 /**
  * Interface defining an HTTP client.

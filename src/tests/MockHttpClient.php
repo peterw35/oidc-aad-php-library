@@ -25,14 +25,14 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\tests;
+namespace remotelearner\aadsample\tests;
 
 /**
  * Interface defining an HTTP client.
  *
  * @codeCoverageIgnore
  */
-class MockHttpClient implements \microsoft\adalphp\HttpClientInterface {
+class MockHttpClient implements \remotelearner\aadsample\HttpClientInterface {
     /**
      * Set the response that will be returned.
      *

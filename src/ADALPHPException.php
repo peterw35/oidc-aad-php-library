@@ -25,12 +25,12 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp;
+namespace remotelearner\aadsample;
 
 /**
  * Extension to exception class allowing for debug data.
  */
-class ADALPHPException extends \Exception {
+class AADSAMPLEException extends \Exception {
     /** @var mixed Any data useful for debugging. */
     protected $debugdata;
 

@@ -1,6 +1,6 @@
 {
-    "name": "microsoft/adalphp",
-    "description": "Microsoft Azure Active Directory Authentication Library (ADAL) for PHP",
+    "name": "remotelearner/aadsample",
+    "description": "Azure Active Directory Authentication Code Sample for PHP",
     "license": "MIT",
     "keywords": [
         "openidconnect",
@@ -29,7 +29,7 @@
     },
     "autoload": {
         "psr-4": {
-            "microsoft\\adalphp\\": "src/"
+            "remotelearner\\aadsample\\": "src/"
         }
     }
 }

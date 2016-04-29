@@ -25,12 +25,12 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\tests;
+namespace remotelearner\aadsample\tests;
 
 /**
  * @codeCoverageIgnore
  */
-class MockJWT extends \microsoft\adalphp\JWT {
+class MockJWT extends \remotelearner\aadsample\JWT {
     /**
      * Decode an encoded JWT.
      *
@@ -45,7 +45,7 @@ class MockJWT extends \microsoft\adalphp\JWT {
 /**
  * Tests JWT
  *
- * @group adalphp
+ * @group aadsample
  * @codeCoverageIgnore
  */
 class JWTTest extends \PHPUnit_Framework_TestCase {
@@ -130,7 +130,7 @@ class JWTTest extends \PHPUnit_Framework_TestCase {
         if (!empty($expectedexception)) {
             $this->setExpectedException($expectedexception[0], $expectedexception[1]);
         }
-        $actualresult = \microsoft\adalphp\tests\MockJWT::decode($encodedjwt);
+        $actualresult = \remotelearner\aadsample\tests\MockJWT::decode($encodedjwt);
         $this->assertEquals($expectedresult, $actualresult);
     }
 }

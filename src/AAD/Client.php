@@ -25,14 +25,14 @@
  * @copyright (C) 2016 onwards Microsoft Corporation (http://microsoft.com/)
  */
 
-namespace microsoft\adalphp\AAD;
+namespace remotelearner\aadsample\AAD;
 
-use \microsoft\adalphp\ADALPHPException;
+use \remotelearner\aadsample\AADSAMPLEException;
 
 /**
  * Azure AD client.
  */
-class Client extends \microsoft\adalphp\OIDC\Client {
+class Client extends \remotelearner\aadsample\OIDC\Client {
     /** @var string Auth endpoint. */
     protected $authendpoint = 'https://login.microsoftonline.com/common/oauth2/authorize';
 
@@ -51,11 +51,11 @@ class Client extends \microsoft\adalphp\OIDC\Client {
      */
     public function rocredsrequest($username, $password) {
         if (empty($this->tokenendpoint)) {
-            throw new ADALPHPException($this->lang['notokenendpoint']);
+            throw new AADSAMPLEException($this->lang['notokenendpoint']);
         }
 
         if (strpos($this->tokenendpoint, 'https://') !== 0) {
-            throw new ADALPHPException($this->lang['insecuretokenendpoint'], $this->tokenendpoint);
+            throw new AADSAMPLEException($this->lang['insecuretokenendpoint'], $this->tokenendpoint);
         }
 
         $params = [
@@ -76,11 +76,11 @@ class Client extends \microsoft\adalphp\OIDC\Client {
      * Construct an IDToken object from an encoded id_token string.
      *
      * @param string $idtoken An encoded id_token string.
-     * @return \microsoft\adalphp\OIDC\IDTokenInterface An IDToken object.
+     * @return \remotelearner\aadsample\OIDC\IDTokenInterface An IDToken object.
      */
     protected function constructidtoken($idtoken) {
-        $httpclient = new \microsoft\adalphp\HttpClient;
+        $httpclient = new \remotelearner\aadsample\HttpClient;
         $keys = IDToken::get_keys($httpclient);
-        return \microsoft\adalphp\AAD\IDToken::instance_from_encoded($idtoken, $keys);
+        return \remotelearner\aadsample\AAD\IDToken::instance_from_encoded($idtoken, $keys);
     }
 }

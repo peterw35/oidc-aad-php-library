@@ -1,13 +1,10 @@
-# Microsoft Azure Active Directory Authentication Library (ADAL) for PHP
-The ADAL SDK for PHP gives your application the full functionality of Microsoft Azure AD, including industry standard protocol support for OAuth2, Web API integration with user level consent, and two factor authentication support.
-
-## NOTE
-This is an early, pre-release version of the library.
+# Azure Active Directory Authentication Code Sample for PHP
+This code sample for PHP demonstrates authentication with Microsoft Azure AD, including industry standard protocol support for OAuth2, Web API integration with user level consent, and two factor authentication support.
 
 ## Installation
 To install this library:
 ```
-git clone git@github.com:AzureAD/azure-activedirectory-for-php.git
+git clone git@github.com:jamesmcq/oidc-aad-php-library.git
 ```
 
 This library is mostly self-contained, however it uses PSR-4 for autoloading, and PHPUnit for unit testing. You can use Composer to install PHPUnit and generate a PSR-4 autoloader.
@@ -19,20 +16,20 @@ This library is mostly self-contained, however it uses PSR-4 for autoloading, an
 ## Usage
 Construct an HttpClient object:
 ```
-$httpclient = new \microsoft\adalphp\HttpClient;
+$httpclient = new \remotelearner\aadsample\HttpClient;
 ```
-Construct a storage object. A storage object needs to implement the \microsoft\adalphp\OIDC\StorageInterface interface. Currently, two sample implementations are available under `microsoft\adalphp\OIDC\StorageProviders` namespace - `SQLite` and `Session`, but you may need to implement this class yourself based on your storage needs or environment.
+Construct a storage object. A storage object needs to implement the \remotelearner\aadsample\OIDC\StorageInterface interface. Currently, two sample implementations are available under `remotelearner\aadsample\OIDC\StorageProviders` namespace - `SQLite` and `Session`, but you may need to implement this class yourself based on your storage needs or environment.
 Initialize `SQLite` storage provider (as shown in `samples` folder):
 ```
-$storage = new \microsoft\adalphp\OIDC\StorageInterface\SQLite(__DIR__.'/storagedb.sqlite');
+$storage = new \remotelearner\aadsample\OIDC\StorageInterface\SQLite(__DIR__.'/storagedb.sqlite');
 ```
 or initialize the `Session` storage provider:
 ```
-$storage = new \microsoft\adalphp\OIDC\StorageInterface\Session();
+$storage = new \remotelearner\aadsample\OIDC\StorageInterface\Session();
 ```
 Construct the AzureAD client class using the $httpclient and $storage instances.
 ```
-$client = new \microsoft\adalphp\AAD\Client($httpclient, $storage);
+$client = new \remotelearner\aadsample\AAD\Client($httpclient, $storage);
 ```
 Set your client ID, client secret, and redirect URI.
 ```
@@ -56,7 +53,7 @@ list($idtoken, $tokenparams, $stateparams) = $client->handle_auth_response($_REQ
 To perform a resource-owner credentials request:
 ```
 $returned = $client->rocredsrequest($_POST['username'], $_POST['password']);
-$idtoken = \microsoft\adalphp\AAD\IDToken::instance_from_encoded($returned['id_token']);
+$idtoken = \remotelearner\aadsample\AAD\IDToken::instance_from_encoded($returned['id_token']);
 ```
 
 To get user information from an IDToken, call ->claim() on the $idtoken object. This returns OpenID Connect claims:
@@ -68,13 +65,8 @@ $idtoken->claim('upn');
 ## Samples and Documentation
 The `samples` folder contains a sample implementation of the library demonstrating basic authentication in several different ways.
 
-## Community Help and Support
-We leverage [Stack Overflow](http://stackoverflow.com/) to work with the community on supporting Azure Active Directory and its SDKs, including this one! We highly recommend you ask your questions on Stack Overflow (we're all on there!) Also browse existing issues to see if someone has had your question before.
-
-We recommend you use the "adal" tag so we can see it! Here is the latest Q&A on Stack Overflow for ADAL: [http://stackoverflow.com/questions/tagged/adal](http://stackoverflow.com/questions/tagged/adal)
-
 ## Contributing
-All code is licensed under the MIT license and we triage actively on GitHub. We enthusiastically welcome contributions and feedback. You can fork the repo and start contributing now. [More details](https://github.com/AzureAD/azure-activedirectory-library-for-php/blob/master/contributing.md) about contributing.
+All code is licensed under the MIT license and we triage actively on GitHub. We enthusiastically welcome contributions and feedback. You can fork the repo and start contributing now. [More details](https://github.com/jamesmcq/oidc-aad-php-library/blob/master/contributing.md) about contributing.
 
 ## License
 Copyright (c) Microsoft Corporation. Licensed under the MIT License.
