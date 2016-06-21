@@ -73,7 +73,7 @@ class IDToken extends \remotelearner\aadsample\OIDC\IDToken {
             $jwks_uri = 'https://login.windows.net/common/discovery/keys';
         }
 
-        $keydata = $httpclient->get($oidcconfig['jwks_uri']);
+        $keydata = $httpclient->get($jwks_uri);
         $keydata = @json_decode($keydata, true);
         if (empty($keydata) || !is_array($keydata) || !isset($keydata['keys'])) {
             throw new AADSAMPLEException('Could not get openid connect config (2).');
